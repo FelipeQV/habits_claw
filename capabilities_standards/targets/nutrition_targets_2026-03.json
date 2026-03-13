@@ -1,0 +1,38 @@
+{
+ "schema_version": "1.0",
+ "source": {
+ "type": "pdf",
+ "file": "Felipe Quintana Marzo 2026.pdf",
+ "nutritionist": "Jose Rueda"
+ },
+ "plan": {
+ "start": "2026-03",
+ "next_revision": "2026-04"
+ },
+ "general_data": {
+ "weight_kg": 85.8,
+ "height_m": 1.87,
+ "age": 37,
+ "goal": "fat_loss",
+ "body_fat_pct": 20,
+ "body_fat_kg": 15.3,
+ "lean_mass_kg": 70.5,
+ "bmi": 24,
+ "waist_hip_index": 0.91
+ },
+ "tracked_metrics": ["calories", "protein", "carbs", "fat", "fiber"],
+ "target_metrics": {
+ "calories": 1700,
+ "protein": 140,
+ "carbs": 170,
+ "fat": 50
+ },
+ "units": {
+ "calories": "kcal",
+ "protein": "g",
+ "carbs": "g",
+ "fat": "g",
+ "fiber": "g"
+ },
+ "priorities": ["calories", "protein", "carbs", "fat"]
+}

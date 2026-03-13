@@ -1,0 +1,101 @@
+version: 1.3
+status: draft
+
+agent:
+  id: "{{AGENT_ID}}"
+  name: "{{AGENT_NAME}}"
+  dimension: "{{DOMAIN}}"
+  description: "{{AGENT_DESCRIPTION}}"
+
+inherits:
+  capability_definitions: capabilities_standards/governance/capability_definitions.yaml
+
+data_model:
+  table:
+    name: "{{PRIMARY_TABLE}}"
+  fields: "{{DATA_MODEL_FIELDS_LIST}}"
+
+targets:
+  enabled: false
+  source: "{{TARGET_SOURCE}}"
+  managed_by: "{{ORCHESTRATION_AGENT_ID}}"
+  fields: []
+  rules: []
+
+delta:
+  enabled: false
+  calculated_at: write_time
+  formula: "actual - target"
+  stored: false
+  notes: "{{RENDER_TEMPLATE_HINT}}"
+
+capabilities:
+  log:
+    inherits: capability_definitions.log
+    extensible: true
+    subtypes:
+      - name: "{{SUBTYPE_NAME}}"
+        active: true
+        table: "{{ENTITY_TABLE}}"
+        binding:
+          id: "{{TASK_ID}}"
+          inference: "{{INFERENCE_POLICY}}"
+          correction_strategy: "{{CORRECTION_STRATEGY}}"
+          key: []
+        overrides: []
+        extends: []
+        nl_hints:
+          intent_clues: []
+          interpretation_rules: []
+
+  update:
+    inherits: capability_definitions.update
+    extensible: true
+    subtypes:
+      - name: "{{SUBTYPE_NAME}}"
+        active: true
+        table: "{{ENTITY_TABLE}}"
+        binding:
+          id: "{{TASK_ID}}"
+          inference: "{{INFERENCE_POLICY}}"
+          correction_strategy: "{{CORRECTION_STRATEGY}}"
+          key: ["{{PRIMARY_KEY_FIELD}}"]
+        overrides: []
+        extends: []
+
+  report:
+    inherits: capability_definitions.report
+    extensible: true
+    subtypes:
+      - name: "{{SUBTYPE_NAME}}"
+        active: true
+        table: "{{ENTITY_TABLE}}"
+        binding:
+          id: "{{TASK_ID}}"
+        overrides: []
+        extends: []
+
+  analyze:
+    inherits: capability_definitions.analyze
+    extensible: true
+    subtypes:
+      - name: "{{SUBTYPE_NAME}}"
+        active: true
+        table: "{{ENTITY_TABLE}}"
+        binding:
+          id: "{{TASK_ID}}"
+        overrides: []
+        extends: []
+
+  prescribe:
+    owned_by: "{{ORCHESTRATION_AGENT_ID}}"
+    this_agent_may: []
+    this_agent_cannot: []
+
+boundaries:
+  - trigger: "{{RENDER_TEMPLATE_HINT}}"
+    response: "<human_readable_error_message>"
+
+redirects:
+  - condition: "{{RENDER_TEMPLATE_HINT}}"
+    to: "{{ORCHESTRATION_AGENT_ID}}"

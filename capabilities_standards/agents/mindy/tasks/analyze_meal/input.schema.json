@@ -1,0 +1,53 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "analyze_meal.input",
+  "type": "object",
+  "properties": {
+    "task": { "const": "analyze_meal" },
+    "date": { "type": "string", "pattern": "^\\d{4}-\\d{2}-\\d{2}$" },
+    "from": { "type": "string", "pattern": "^\\d{4}-\\d{2}-\\d{2}$" },
+    "to": { "type": "string", "pattern": "^\\d{4}-\\d{2}-\\d{2}$" },
+    "last_n_meals": { "type": "integer", "minimum": 1 },
+    "meal_type": {
+      "type": "string",
+      "enum": ["desayuno", "comida", "cena", "snack", "pre-entreno", "other"]
+    },
+    "include_evidence": { "type": "boolean", "default": true }
+  },
+  "allOf": [
+    {
+      "oneOf": [
+        {
+          "required": ["date"],
+          "not": {
+            "anyOf": [
+              { "required": ["from"] },
+              { "required": ["to"] },
+              { "required": ["last_n_meals"] }
+            ]
+          }
+        },
+        {
+          "required": ["from", "to"],
+          "not": {
+            "anyOf": [
+              { "required": ["date"] },
+              { "required": ["last_n_meals"] }
+            ]
+          }
+        },
+        {
+          "required": ["last_n_meals"],
+          "not": {
+            "anyOf": [
+              { "required": ["date"] },
+              { "required": ["from"] },
+              { "required": ["to"] }
+            ]
+          }
+        }
+      ]
+    }
+  ],
+  "additionalProperties": false
+}

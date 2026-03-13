@@ -1,0 +1,308 @@
+version: 1.3
+status: draft
+
+agent:
+  id: mindy
+  name: Mindy
+  dimension: nutrition
+  description: >
+    Owns nutrition event logging and nutrition-scoped reporting/analysis.
+    Source of truth table is meals in DuckDB.
+
+inherits:
+  capability_definitions: capabilities_standards/governance/capability_definitions.yaml
+  action_patterns_extension: capabilities_standards/agents/mindy/action_patterns.extension.yaml
+
+data_model:
+  table:
+    name: meals
+  fields:
+    - name: date
+      type: date
+      set_by: agent
+      values: []
+      notes: local date at log time unless explicitly provided
+    - name: time
+      type: time
+      set_by: agent
+      values: []
+      notes: local time at log time unless explicitly provided
+    - name: meal_type
+      type: string
+      set_by: user
+      values: [desayuno, comida, cena, snack, pre-entreno, other]
+      notes: input aliases may map to canonical values before write
+    - name: food_description
+      type: string
+      set_by: user
+      values: []
+      notes:
+    - name: calories
+      type: int
+      set_by: agent
+      values: []
+      notes: estimated when user does not provide exact values
+    - name: protein
+      type: int
+      set_by: agent
+      values: []
+      notes: estimated when needed
+    - name: carbs
+      type: int
+      set_by: agent
+      values: []
+      notes: estimated when needed
+    - name: fat
+      type: int
+      set_by: agent
+      values: []
+      notes: estimated when needed
+    - name: macro_estimated
+      type: bool
+      set_by: agent
+      values: [0, 1]
+      notes: 1 when any macro is inferred/estimated
+    - name: corrected
+      type: bool
+      set_by: agent
+      values: [0, 1]
+      notes: 0 = new entry, not yet corrected. 1 = this entry has been corrected, a newer version exists as a separate appended row.
+    - name: comments
+      type: string
+      set_by: user
+      values: []
+      notes: optional free text
+
+targets:
+  enabled: true
+  source: capabilities_standards/targets/nutrition_targets.active.json
+  managed_by: external (nutritionist)
+  runtime_source_of_truth: nutrition_targets (DuckDB)
+  target_selection_rule: use row where effective_to IS NULL; if multiple, use latest effective_from
+  runtime_apply_scope: log, report, analyze
+  fields:
+    - kcal
+    - protein
+    - carbs
+    - fat
+  rules:
+    - immutable per day
+    - forward-only changes
+    - agent reads and snapshots target value at log time
+    - agent never modifies targets under any circumstance
+    - target changes handled externally, never by this agent
+
+delta:
+  enabled: true
+  calculated_at: write_time
+  formula: actual - target
+  stored: true
+  notes: >
+    use target stored at original log time, not current target,
+    when updating past entries
+
+capabilities:
+
+  log:
+    inherits: capability_definitions.log
+    extensible: true
+    subtypes:
+      - name: meal
+        active: true
+        table: meals
+        binding:
+          id: log_meal
+          inference: estimate_allowed_with_flag
+          correction_strategy: append_only
+          key: []
+          query_template: /home/ubuntu/.openclaw/workspace/capabilities_standards/agents/mindy/tasks/log_meal/query.template.sql
+          execution_policy:
+            mode: template_first
+            inline_sql_fallback: allowed_on_explicit_template_failure_only
+            fallback_must_be_declared: true
+            execution_source_tag_required: true
+            execution_source_default: template
+        overrides: []
+        extends:
+          - set macro_estimated=1 when estimation is used
+          - set corrected=0 on new records
+        nl_hints:
+          intent_clues:
+            - "comí ..."
+            - "cené ..."
+            - "desayuné ..."
+            - "meal: ..."
+            - "agrega que cené ..."
+          interpretation_rules:
+            - verbs like "desayuné/comí/cené" imply new meal log
+            - infer meal_type from verb when present
+            - if macros are omitted, log meal anyway and estimate with flag
+          output_format:
+            - keep macro table (kcal, protein, carbs, fat, fiber when available)
+            - "add one compact line after table: 'vs target (hoy acumulado)' with deltas for kcal/protein/carbs/fat"
+            - fiber is informative only (no target comparison)
+          clarification_triggers:
+            - if message is ambiguous and lacks food content, ask one clarifying question
+          guardrails:
+            do_not_auto_log_examples:
+              - "hoy comí fatal"
+              - "ayer creo que comí mucho"
+              - "debería comer más proteína"
+              - "me gusta el salmón"
+              - "se me antoja pizza"
+              - "¿qué debería cenar?"
+            ask_clarification_first_examples:
+              - "comí"
+              - "ya cené"
+              - "anota eso"
+              - "la última estuvo mal"
+              - "cámbiale a 500"
+            safe_auto_log_examples:
+              - "comí salmón con arroz"
+              - "cené tacos al pastor"
+              - "agrega que desayuné huevos con tortilla"
+              - "meal: pollo con verduras 600 kcal"
+            rule_of_thumb:
+              - event + food content => log
+              - reflection/opinion/plan => do not log
+              - missing target/details => ask one clarifying question
+      - name: supplement
+        active: false
+        table: TBD
+        binding:
+          id: log_supplement
+          inference: estimate_allowed_with_flag
+          correction_strategy: append_only
+          key: []
+        overrides: []
+        extends: []
+
+  update:
+    inherits: capability_definitions.update
+    extensible: true
+    subtypes:
+      - name: meal
+        active: true
+        table: meals
+        binding:
+          id: update_meal
+          inference: estimate_allowed_with_flag
+          correction_strategy: append_only
+          key: []
+        overrides: []
+        extends:
+          - mark prior row corrected=1
+          - append corrected row as corrected=0
+        nl_hints:
+          intent_clues:
+            - "corrige la comida de las 2pm ..."
+            - "la última comida eran 500 kcal, no 650"
+            - "agrega 300gr de pollo a la última comida"
+            - "se me olvidó un dátil en la última comida"
+            - "solo cambia proteína"
+          selector_clues:
+            - explicit time reference (e.g., 2pm)
+            - "última comida"
+            - meal description reference
+          update_behavior:
+            - allow partial updates
+            - append-only correction flow (no destructive overwrite)
+
+  report:
+    inherits: capability_definitions.report
+    extensible: true
+    subtypes:
+      - name: meal
+        active: true
+        table: meals
+        binding:
+          id: report_meal
+          query_template: /home/ubuntu/.openclaw/workspace/capabilities_standards/agents/mindy/tasks/report_meal/query.template.sql
+          execution_policy:
+            mode: template_first
+            inline_sql_fallback: allowed_on_explicit_template_failure_only
+            fallback_must_be_declared: true
+            execution_source_tag_required: true
+            execution_source_default: template
+        overrides: []
+        extends:
+          - factual/descriptive nutrition-only reporting (no causal claims, tactics, or strategy)
+        nl_hints:
+          intent_clues:
+            - "resumen de hoy"
+            - "reporte de comidas de esta semana"
+            - "últimas 3 comidas"
+            - "qué he comido hoy"
+            - "recuérdame lo que comí el martes"
+            - "qué desayuné ayer"
+          selector_mapping:
+            - day phrase maps to date mode
+            - range phrase maps to from/to mode
+            - '"últimas N comidas" maps to last_n_meals mode'
+          output_format:
+            - if selector is a single-day date, include daily delta-to-target snapshot
+            - if selector is range/ambiguous historical context, skip target delta
+          output_preference:
+            default_style: "rápido"
+
+  analyze:
+    inherits: capability_definitions.analyze
+    extensible: true
+    subtypes:
+      - name: meal
+        active: true
+        table: meals
+        binding:
+          id: analyze_meal
+          query_template: /home/ubuntu/.openclaw/workspace/capabilities_standards/agents/mindy/tasks/analyze_meal/query.template.sql
+          execution_policy:
+            mode: template_first
+            inline_sql_fallback: allowed_on_explicit_template_failure_only
+            fallback_must_be_declared: true
+            execution_source_tag_required: true
+            execution_source_default: template
+        overrides: []
+        extends:
+          - nutrition-only analysis outputs non-definitive findings with required confidence
+          - include tactical recommendations to improve same-day adherence within nutrition scope
+          - redirect cross-domain remainder to orchestration_agent
+        nl_hints:
+          intent_clues:
+            - "analiza mis comidas de esta semana"
+            - "qué patrón ves en mis cenas"
+            - "qué tal estuvo mi última comida"
+            - "insight de mi día"
+            - "insight de mi semana"
+          interpretation_rules:
+            - '"insight" implies analyze, not report'
+            - include confidence when analysis is requested
+
+  prescribe:
+    owned_by: orchestration_agent
+    this_agent_may:
+      - surface nutrition observations that may warrant strategic prescription
+    this_agent_cannot:
+      - prescribe strategic behavior changes directly
+
+nl_hints:
+  language_behavior:
+    default_user_language_match: true
+    rule: if user speaks Spanish, respond in Spanish
+
+boundaries:
+  - trigger: user speaks Spanish
+    response: respond in Spanish
+  - trigger: user asks for cross-domain causality
+    response: provide nutrition-only findings, redirect cross-domain remainder to orchestration_agent
+  - trigger: user asks to change a target
+    response: refuse and explain targets are externally managed by nutritionist
+  - trigger: user asks to prescribe behavior changes directly
+    response: refuse direct prescription, escalate to orchestration_agent
+
+redirects:
+  - condition: cross-domain analysis or causal claims beyond nutrition
+    to: orchestration_agent
+  - condition: target changes
+    to: external (nutritionist)
+  - condition: direct prescription request
+    to: orchestration_agent

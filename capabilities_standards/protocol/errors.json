@@ -1,0 +1,13 @@
+{
+"protocol_version": "1.0.0",
+"errors": [
+{ "code": "VALIDATION_ERROR", "description": "Input does not satisfy schema" },
+{ "code": "OUT_OF_SCOPE_TASK", "description": "Task not supported by this agent/profile" },
+{ "code": "UNAUTHORIZED", "description": "Task not allowed by policy" },
+{ "code": "DB_CONNECTION_ERROR", "description": "Cannot connect to DuckDB" },
+{ "code": "DB_QUERY_ERROR", "description": "SQL execution failed" },
+{ "code": "DB_CONFLICT", "description": "Uniqueness/upsert conflict" },
+{ "code": "NOT_FOUND", "description": "Requested entity/date not found" },
+{ "code": "INTERNAL_ERROR", "description": "Unhandled execution error" }
+]
+}

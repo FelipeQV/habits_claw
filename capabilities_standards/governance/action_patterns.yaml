@@ -1,0 +1,127 @@
+version: 1.0
+status: draft
+scope: cross-agent
+
+purpose: >
+  Define the minimum implementation pattern for capability actions across agents,
+  without duplicating task schema details or protocol envelope definitions.
+
+references:
+  capability_definitions: capabilities_standards/governance/capability_definitions.yaml
+  protocol_readme: capabilities_standards/protocol/README.md
+  shared_error_codes: capabilities_standards/protocol/errors.json
+
+global_conventions:
+  task_id_pattern: "<action>_<entity>"
+  file_layout:
+    base: "capabilities_standards/agents/<agent>/tasks/<task>/"
+    required_files:
+      - input.schema.json
+      - output.schema.json
+      - output.format.md
+      - examples.json
+  deliverables_pattern:
+    task_files:
+      - capabilities_standards/agents/<agent>/tasks/<task>/input.schema.json
+      - capabilities_standards/agents/<agent>/tasks/<task>/output.schema.json
+      - capabilities_standards/agents/<agent>/tasks/<task>/output.format.md
+      - capabilities_standards/agents/<agent>/tasks/<task>/examples.json
+    docs_to_update:
+      - capabilities_standards/protocol/README.md
+      - capabilities_standards/protocol/agent-contracts.md
+      - capabilities_standards/agents/<agent>/agent_spec.yaml
+  output_envelope_ref: capabilities_standards/protocol/README.md
+  schema_style:
+    input: draft_2020_12
+    output: draft_2020_12_lite
+
+actions:
+
+  log:
+    intent: capture new factual events
+    access_mode: write_append
+    required_controls:
+      - inference policy must come from subtype binding
+      - if inferred, estimation must be flagged
+      - no destructive rewrite
+      - execute using subtype query_template by default (template_first)
+      - ad-hoc inline SQL allowed only on explicit template failure and must be declared
+    scope_rules:
+      - dimension-owned data only
+
+  update:
+    intent: correct existing records explicitly
+    access_mode: write_correction
+    required_controls:
+      - correction strategy must come from subtype binding
+      - append_only: mark prior corrected=1, append new corrected row corrected=0
+      - upsert_by_key: allowed only when declared in subtype binding
+      - no destructive overwrite outside declared strategy
+    scope_rules:
+      - dimension-owned data only
+
+  report:
+    intent: provide factual summaries of recorded data
+    access_mode: read_only
+    required_controls:
+      - factual output only
+      - include data_quality context (low|mid|high + brief reason)
+      - no prescriptions
+      - execute using subtype query_template by default (template_first)
+      - ad-hoc inline SQL allowed only on explicit template failure and must be declared
+    suggested_behavior:
+      input:
+        - timeframe selector (date or from/to)
+        - optional category filter
+      output:
+        - totals (domain-relevant metrics)
+        - record_count
+        - estimation_rate
+        - entries list
+      scope:
+        - domain-only
+        - no causal claims
+    scope_rules:
+      - strictly own dimension only
+      - no causal claims
+
+  analyze:
+    intent: identify within-dimension patterns/hypotheses
+    access_mode: read_only
+    required_controls:
+      - include confidence.level and confidence.basis
+      - findings must be evidence-based and non-definitive
+      - no direct prescriptions by dimension agents
+      - execute using subtype query_template by default (template_first)
+      - ad-hoc inline SQL allowed only on explicit template failure and must be declared
+    scope_rules:
+      - strictly own dimension only
+      - if cross-domain causality appears, return within-scope findings and redirect remainder to orchestration_agent
+
+  prescribe:
+    intent: suggest improvement experiments
+    access_mode: optional_log_only
+    required_controls:
+      - owned by orchestration_agent by default
+      - delegation required for non-orchestration execution
+    scope_rules:
+      - dimension agents may surface observations but may not prescribe directly unless delegated
+
+orchestration_patterns:
+  target_update:
+    purpose: generic target update orchestration (agent/domain-specific details live in agent extension files)
+    trigger: agent/domain specific
+    steps: []
+    controls: []
+    verification: []
+
+activation_gate:
+  must_pass:
+    - input schema exists and validates
+    - output schema exists and validates
+    - examples file exists with at least one success and one error case
+    - task is declared in agent spec binding
+    - references align with current standards paths
+    - at least one runtime smoke test has been executed
+    - docs updated (protocol + agent contracts + affected agent spec)
+    - change log entry written (standards and/or agent-level)

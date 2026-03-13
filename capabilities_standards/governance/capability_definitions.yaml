@@ -1,0 +1,167 @@
+# ============================================================
+# CAPABILITY DEFINITIONS v1
+# ============================================================
+# Global behavior contract for all dimension agents.
+# Agent specs inherit from here and only declare overrides/extends.
+#
+# CONVENTIONS
+# - principles: non-negotiable intent per capability
+# - default_rules: inherited by all agents unless overridden
+# - overrides: replace inherited default rules
+# - extends: add rules on top of inherited defaults
+# ============================================================
+
+version: 1.0
+status: active
+
+capability_rendering:
+  emoji_map:
+    log: "✏️"
+    update: "📝"
+    report: "📖"
+    analyze: "📈"
+    prescribe: "🔮"
+    prescribe_delegation: "🧭"
+  user_facing_rules:
+    - user-facing responses must start with emoji-only capability marker
+    - never show capability/task technical labels in user-facing text
+
+subtype_convention:
+  definition: >
+    A subtype is a discrete unit of action within a capability.
+    Each subtype may write to a different table and may override
+    or extend parent capability rules independently.
+  inheritance_model:
+    inherits: all default rules from parent capability
+    overrides: replace specific inherited rules
+    extends: add rules on top of inherited defaults
+  extensible: true
+  required_binding_fields:
+    - id
+    - inference
+    - correction_strategy
+  inference_policies:
+    values:
+      - estimate_allowed_with_flag
+      - not_allowed
+    definitions:
+      estimate_allowed_with_flag: >
+        Agent may infer missing values but must flag the entry explicitly.
+      not_allowed: >
+        Agent may never infer; must log null and flag.
+  correction_strategy_reference: capability_definitions.update.correction_strategies.values
+
+data_quality_scale:
+  type: qualitative
+  values: [low, mid, high]
+  guidance_only: true
+  guidance:
+    high: mostly non-estimated and complete records
+    mid: mixed estimated/non-estimated or partially complete records
+    low: mostly estimated and/or incomplete records
+  relationship_to_confidence:
+    - data_quality describes the quality of input records
+    - confidence describes the reliability of analysis conclusions
+    - data_quality informs but does not fully determine confidence
+    - confidence also considers sample_size, consistency_over_time, and context
+  see_also: confidence_guidelines
+
+confidence_guidelines:
+  required_in_analyze: true
+  format:
+    level: [low, mid, high]
+    basis:
+      - data_completeness
+      - estimation_rate
+      - sample_size
+      - consistency_over_time
+      - context
+  strict_thresholds_required: false
+  relationship_to_data_quality:
+    - data_quality describes the quality of input records
+    - confidence describes the reliability of analysis conclusions
+    - data_quality informs but does not fully determine confidence
+    - confidence also considers sample_size, consistency_over_time, and context
+  see_also: data_quality_scale
+
+capability_definitions:
+
+  log:
+    purpose: >
+      Capture new factual records of events as they occur.
+      Represents what happened, when, and relevant descriptive details.
+    principles:
+      - prioritize accuracy over interpretation
+      - record reality as faithfully as possible
+      - never analyze or prescribe in this stage
+    default_rules:
+      - timestamp set by agent unless user explicitly provides
+      - inference policy is defined per subtype binding
+      - if inference is used, it must be explicitly flagged
+      - corrected flag set to 0 on all new event entries
+
+  update:
+    purpose: >
+      Correct or enrich previously logged records when better information appears.
+    principles:
+      - preserve historical integrity
+      - make corrections explicit and auditable
+      - never hide mutations
+    correction_strategies:
+      values:
+        - append_only
+        - upsert_by_key
+      default: append_only
+      notes: >
+        Agent specs declare which strategy applies per subtype.
+        Default applies if not declared.
+        If upsert_by_key is used, key must be declared explicitly in subtype binding.
+    default_rules:
+      - use values/context valid at original log time when applicable
+      - do not trigger cross-domain aggregations (orchestration responsibility)
+
+  report:
+    purpose: >
+      Present factual, descriptive summaries of records over a timeframe/category.
+    principles:
+      - observable data only
+      - no causal claims, recommendations, or directives
+    default_rules:
+      - scope strictly to own dimension only
+      - always include data_quality context (low/mid/high + brief reason)
+      - counts, averages, distributions, timelines allowed
+      - conclusions, tactics, and strategy not allowed
+
+  analyze:
+    purpose: >
+      Identify patterns, trends, anomalies, and possible within-dimension relationships,
+      then provide evidence-based tactical recommendations for near-term adherence.
+    principles:
+      - interpretation allowed but cautious and evidence-based
+      - findings are hypotheses/patterns, not definitive truth
+      - tactical outputs are expected (short-horizon, day-level)
+    default_rules:
+      - scope strictly to own dimension data
+      - weight findings by data quality context
+      - always return confidence.level (low/mid/high) and short basis
+      - include actionable within-dimension tactics tied to the findings
+      - if cross-domain causality is implied, return all findings and tactics within own dimension scope, then explicitly redirect the cross-domain remainder to orchestration_agent. do not withhold within-scope findings.
+
+  prescribe:
+    purpose: >
+      Design strategic, multi-day behavior/process changes based on observed patterns.
+    principles:
+      - strategic horizon (multi-day), not same-day tactics
+      - framed as experiments, not directives
+      - cross-domain context preferred by default
+    default_rules:
+      - owned by orchestration_agent unless delegated
+      - dimension agents may surface observations/tactical needs but may not prescribe strategic plans directly
+      - delegation must be explicit via allowlist
+
+prescribe_delegation:
+  default_owner: orchestration_agent
+  allowlist_managed_by: user (manually)
+  allowlist: []
+  notes: >
+    Keep minimal for now. Add explicit entries only when delegation is truly needed.

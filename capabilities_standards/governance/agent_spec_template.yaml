@@ -1,0 +1,179 @@
+# ============================================================
+# AGENT SPEC TEMPLATE v1.3
+# ============================================================
+# One file per dimension agent.
+# Inherits global behavior from:
+#   capabilities_standards/governance/capability_definitions.yaml
+#
+# PURPOSE:
+# - Declare what this specific agent can do
+# - Bind each subtype to an operation contract
+# - Define boundaries and redirects
+#
+# TABLE PRECEDENCE:
+# - data_model.table is the agent-level default/reference
+# - subtype.table is the execution table for that subtype
+# - if both exist, subtype.table takes precedence
+# ============================================================
+
+conventions:
+  version:
+    format: major.minor
+    managed_by: user (manually)
+    notes: bump minor for field changes, major for structural changes
+  status:
+    values: [draft, active, deprecated, archived]
+    definitions:
+      draft: being defined, not yet used by any agent
+      active: stable, in use by one or more agents
+      deprecated: superseded by newer version, agents should migrate
+      archived: no longer in use, kept for reference only
+  active_flag_behavior:
+    active_true: subtype is available for use
+    active_false: subtype is disabled
+    when_disabled:
+      - agent must refuse the request explicitly
+      - inform user subtype is disabled
+      - suggest alternative subtype in same dimension if one exists
+      - if no alternative exists, refuse and explain
+
+version: 1.3
+status: draft
+
+nl_hints:
+  # Top-level NL hints are only for global language behavior (not task intent parsing).
+  # Keep task-specific NL hints inside each capability subtype block.
+  # Avoid ambiguous shared task hints at top level; scope them per subtype instead.
+  language_behavior:
+    default_user_language_match: true
+    rule: # optional global language/style rule for all subtypes
+
+agent:
+  id:
+  name:
+  dimension:
+  description:
+
+inherits:
+  capability_definitions: capabilities_standards/governance/capability_definitions.yaml
+
+data_model:
+  table:
+    name:
+  fields:
+    - name:
+      type: # date | time | string | float | int | bool | array | json
+      set_by: # user | agent
+      values: [] # optional enum/bool domain
+      notes:
+
+targets:
+  enabled: false
+  # if enabled: false, all remaining fields in this section are optional and will be ignored at runtime
+  # if enabled: true, all remaining fields are required
+  source:
+  managed_by:
+  fields: []
+  rules: []
+
+delta:
+  enabled: false
+  # if enabled: false, all remaining fields in this section are optional and will be ignored at runtime
+  # if enabled: true, all remaining fields are required
+  calculated_at: # write_time | query_time
+  formula:
+  stored: false
+  notes:
+
+capabilities:
+
+  log:
+    inherits: capability_definitions.log
+    extensible: true
+    subtypes:
+      # Canonical subtype key order: name, active, table, binding, overrides, extends, nl_hints.
+      - name:
+        active: true
+        table:
+        binding:
+          id:
+          inference: # estimate_allowed_with_flag | not_allowed
+          correction_strategy: # append_only | upsert_by_key
+          key: [] # required only if correction_strategy=upsert_by_key
+        overrides: []
+        extends: []
+        nl_hints:
+          # Task-specific NL hints belong in subtype blocks (not top-level).
+          intent_clues: []
+          interpretation_rules: []
+          clarification_triggers: []
+          guardrails: []
+
+  update:
+    inherits: capability_definitions.update
+    extensible: true
+    subtypes:
+      - name:
+        active: true
+        table:
+        binding:
+          id:
+          inference: # estimate_allowed_with_flag | not_allowed
+          correction_strategy: # append_only | upsert_by_key
+          key: [] # required only if correction_strategy=upsert_by_key
+        overrides: []
+        extends: []
+        nl_hints:
+          # Task-specific NL hints belong in subtype blocks (not top-level).
+          intent_clues: []
+          selector_clues: []
+          update_behavior: []
+
+  report:
+    inherits: capability_definitions.report
+    extensible: true
+    subtypes:
+      # report = facts/descriptive outputs only (no tactics/strategy).
+      - name:
+        active: true
+        table:
+        binding:
+          id:
+        overrides: []
+        extends: []
+        nl_hints:
+          # Task-specific NL hints belong in subtype blocks (not top-level).
+          intent_clues: []
+          selector_mapping: []
+          output_preference: []
+
+  analyze:
+    inherits: capability_definitions.analyze
+    extensible: true
+    subtypes:
+      # analyze = within-dimension interpretation + expected tactical recommendations.
+      - name:
+        active: true
+        table:
+        binding:
+          id:
+        overrides: []
+        extends: []
+        nl_hints:
+          # Task-specific NL hints belong in subtype blocks (not top-level).
+          intent_clues: []
+          interpretation_rules: []
+
+  prescribe:
+    # prescribe = strategic layer (orchestration-owned unless delegated).
+    owned_by: orchestration_agent
+    this_agent_may: []
+    this_agent_cannot: []
+
+boundaries:
+  - trigger:
+    response:
+
+redirects:
+  - condition:
+    to:

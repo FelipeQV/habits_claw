@@ -1,0 +1,156 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "analyze_meal.output",
+  "type": "object",
+  "required": ["protocol_version", "task", "ok", "data", "error", "meta"],
+  "properties": {
+    "protocol_version": { "const": "1.0.0" },
+    "task": { "const": "analyze_meal" },
+    "ok": { "type": "boolean" },
+    "data": {
+      "type": ["object", "null"],
+      "required": ["scope_label", "meal_breakdown", "totals_vs_target", "tactics", "confidence"],
+      "properties": {
+        "scope_label": { "type": "string" },
+        "meal_breakdown": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["meal", "kcal", "protein", "carbs", "fat", "fiber"],
+            "properties": {
+              "meal": { "type": "string" },
+              "kcal": { "type": ["number", "string", "null"] },
+              "protein": { "type": ["number", "string", "null"] },
+              "carbs": { "type": ["number", "string", "null"] },
+              "fat": { "type": ["number", "string", "null"] },
+              "fiber": { "type": ["number", "string", "null"] }
+            },
+            "additionalProperties": false
+          }
+        },
+        "totals_vs_target": {
+          "type": "object",
+          "required": ["kcal", "protein", "carbs", "fat", "fiber"],
+          "properties": {
+            "kcal": {
+              "type": "object",
+              "required": ["today", "target", "diff"],
+              "properties": {
+                "today": { "type": ["number", "string", "null"] },
+                "target": { "type": ["number", "string", "null"] },
+                "diff": { "type": ["number", "string", "null"] }
+              },
+              "additionalProperties": false
+            },
+            "protein": {
+              "type": "object",
+              "required": ["today", "target", "diff"],
+              "properties": {
+                "today": { "type": ["number", "string", "null"] },
+                "target": { "type": ["number", "string", "null"] },
+                "diff": { "type": ["number", "string", "null"] }
+              },
+              "additionalProperties": false
+            },
+            "carbs": {
+              "type": "object",
+              "required": ["today", "target", "diff"],
+              "properties": {
+                "today": { "type": ["number", "string", "null"] },
+                "target": { "type": ["number", "string", "null"] },
+                "diff": { "type": ["number", "string", "null"] }
+              },
+              "additionalProperties": false
+            },
+            "fat": {
+              "type": "object",
+              "required": ["today", "target", "diff"],
+              "properties": {
+                "today": { "type": ["number", "string", "null"] },
+                "target": { "type": ["number", "string", "null"] },
+                "diff": { "type": ["number", "string", "null"] }
+              },
+              "additionalProperties": false
+            },
+            "fiber": {
+              "type": "object",
+              "required": ["today", "target", "diff", "note"],
+              "properties": {
+                "today": { "type": ["number", "string", "null"] },
+                "target": { "type": ["number", "string", "null"] },
+                "diff": { "type": ["number", "string", "null"] },
+                "note": { "type": "string" }
+              },
+              "additionalProperties": false
+            }
+          },
+          "additionalProperties": false
+        },
+        "tactics": {
+          "type": "array",
+          "minItems": 1,
+          "items": { "type": "string", "minLength": 1 }
+        },
+        "confidence": {
+          "type": "object",
+          "required": ["level", "basis"],
+          "properties": {
+            "level": { "type": "string", "enum": ["low", "mid", "high"] },
+            "basis": { "type": "string" }
+          },
+          "additionalProperties": false
+        }
+      },
+      "additionalProperties": false
+    },
+    "error": {
+      "type": ["object", "null"],
+      "required": ["code", "message"],
+      "properties": {
+        "code": {
+          "type": "string",
+          "enum": [
+            "VALIDATION_ERROR",
+            "OUT_OF_SCOPE_TASK",
+            "UNAUTHORIZED",
+            "DB_CONNECTION_ERROR",
+            "DB_QUERY_ERROR",
+            "DB_CONFLICT",
+            "NOT_FOUND",
+            "INTERNAL_ERROR"
+          ]
+        },
+        "message": { "type": "string" }
+      },
+      "additionalProperties": true
+    },
+    "meta": {
+      "type": "object",
+      "required": ["timestamp", "trace_id"],
+      "properties": {
+        "source": { "const": "duckdb" },
+        "db_path": { "const": "/home/ubuntu/health_system.duckdb" },
+        "agent_id": { "type": "string" },
+        "timestamp": { "type": "string", "format": "date-time" },
+        "trace_id": { "type": "string" }
+      },
+      "additionalProperties": true
+    }
+  },
+  "allOf": [
+    {
+      "if": { "properties": { "ok": { "const": true } }, "required": ["ok"] },
+      "then": { "properties": { "data": { "type": "object" }, "error": { "type": "null" } } }
+    },
+    {
+      "if": { "properties": { "ok": { "const": false } }, "required": ["ok"] },
+      "then": {
+        "properties": {
+          "data": { "type": "null" },
+          "error": { "type": "object", "required": ["code", "message"] }
+        }
+      }
+    }
+  ],
+  "additionalProperties": false
+}

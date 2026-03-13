@@ -1,0 +1,21 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "{{TASK_ID}}.input",
+  "type": "object",
+  "required": ["payload"],
+  "properties": {
+    "payload": {
+      "type": "object",
+      "description": "Domain-specific payload for {{TASK_ID}}"
+    },
+    "selector": {
+      "type": "object",
+      "description": "Optional selector for update/report/analyze flows"
+    },
+    "timestamp": {
+      "type": "string",
+      "format": "date-time"
+    }
+  },
+  "additionalProperties": false
+}

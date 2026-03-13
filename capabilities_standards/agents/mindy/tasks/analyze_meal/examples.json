@@ -1,0 +1,92 @@
+[
+  {
+    "name": "success_response_last_n_meals",
+    "input": {
+      "task": "analyze_meal",
+      "last_n_meals": 12,
+      "include_evidence": true
+    },
+    "response": {
+      "protocol_version": "1.0.0",
+      "task": "analyze_meal",
+      "ok": true,
+      "data": {
+        "timeframe": {
+          "mode": "last_n_meals",
+          "last_n_meals": 12,
+          "from": "2026-03-07",
+          "to": "2026-03-10"
+        },
+        "findings": [
+          "Protein intake trends upward on training days, concentrated at comida and cena.",
+          "Macro consistency is moderate; breakfast (desayuno) shows highest calorie variance across selected dates."
+        ],
+        "confidence": {
+          "level": "mid",
+          "basis": [
+            "12-meal sample window",
+            "25% of entries include estimated macros",
+            "analysis limited to nutrition-domain meal logs"
+          ]
+        },
+        "evidence_summary": {
+          "meal_count": 12,
+          "estimated_macro_entries": 3,
+          "filters": {
+            "meal_type": null,
+            "include_evidence": true
+          }
+        },
+        "cross_domain_note": "Sleep/stress causality is outside Mindy's nutrition scope; forward cross-domain interpretation to orchestration_agent."
+      },
+      "error": null,
+      "meta": {
+        "source": "duckdb",
+        "db_path": "/home/ubuntu/health_system.duckdb",
+        "agent_id": "mindy",
+        "timestamp": "2026-03-10T20:40:00Z",
+        "trace_id": "trace-analyze-meal-001"
+      }
+    }
+  },
+  {
+    "name": "validation_error_response",
+    "response": {
+      "protocol_version": "1.0.0",
+      "task": "analyze_meal",
+      "ok": false,
+      "data": null,
+      "error": {
+        "code": "VALIDATION_ERROR",
+        "message": "Provide exactly one timeframe selector: date OR from+to OR last_n_meals."
+      },
+      "meta": {
+        "source": "duckdb",
+        "db_path": "/home/ubuntu/health_system.duckdb",
+        "agent_id": "mindy",
+        "timestamp": "2026-03-10T20:41:00Z",
+        "trace_id": "trace-analyze-meal-002"
+      }
+    }
+  },
+  {
+    "name": "db_error_response",
+    "response": {
+      "protocol_version": "1.0.0",
+      "task": "analyze_meal",
+      "ok": false,
+      "data": null,
+      "error": {
+        "code": "DB_QUERY_ERROR",
+        "message": "Failed to compute meal-pattern aggregates for selected timeframe."
+      },
+      "meta": {
+        "source": "duckdb",
+        "db_path": "/home/ubuntu/health_system.duckdb",
+        "agent_id": "mindy",
+        "timestamp": "2026-03-10T20:42:00Z",
+        "trace_id": "trace-analyze-meal-003"
+      }
+    }
+  }
+]

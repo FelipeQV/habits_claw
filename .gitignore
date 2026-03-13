@@ -8,6 +8,7 @@
 .openclaw/devices/
 .openclaw/identity/
 .openclaw/update-check.json
+.openclaw/cron/runs/
 
 # =========================
 # IGNORE (secrets)
@@ -36,3 +37,4 @@ node_modules/
 .vscode/
 .DS_Store
 Thumbs.db
+.openclaw/workspace-state.json

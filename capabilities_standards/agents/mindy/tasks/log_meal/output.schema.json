@@ -1,0 +1,108 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "log_meal.output",
+  "type": "object",
+  "required": ["protocol_version", "task", "ok", "data", "error", "meta"],
+  "properties": {
+    "protocol_version": { "const": "1.0.0" },
+    "task": { "const": "log_meal" },
+    "ok": { "type": "boolean" },
+    "data": {
+      "type": ["object", "null"],
+      "required": [
+        "calories",
+        "protein",
+        "carbs",
+        "fat",
+        "fiber",
+        "kcal_diff",
+        "protein_diff",
+        "carbs_diff",
+        "fat_diff"
+      ],
+      "properties": {
+        "calories": { "type": "number" },
+        "protein": { "type": "number" },
+        "carbs": { "type": "number" },
+        "fat": { "type": "number" },
+        "fiber": { "type": "number" },
+        "kcal_diff": {
+          "type": "number",
+          "description": "Diferencia kcal: negativo=faltante, positivo=excedente."
+        },
+        "protein_diff": {
+          "type": "number",
+          "description": "Diferencia proteína: negativo=faltante, positivo=excedente."
+        },
+        "carbs_diff": {
+          "type": "number",
+          "description": "Diferencia carbohidratos: negativo=faltante, positivo=excedente."
+        },
+        "fat_diff": {
+          "type": "number",
+          "description": "Diferencia grasa: negativo=faltante, positivo=excedente."
+        }
+      },
+      "additionalProperties": false
+    },
+    "error": {
+      "type": ["object", "null"],
+      "properties": {
+        "code": {
+          "type": "string",
+          "enum": [
+            "VALIDATION_ERROR",
+            "OUT_OF_SCOPE_TASK",
+            "UNAUTHORIZED",
+            "DB_CONNECTION_ERROR",
+            "DB_QUERY_ERROR",
+            "DB_CONFLICT",
+            "NOT_FOUND",
+            "INTERNAL_ERROR"
+          ]
+        },
+        "message": { "type": "string" }
+      },
+      "additionalProperties": false
+    },
+    "meta": {
+      "type": "object",
+      "required": ["timestamp", "trace_id"],
+      "properties": {
+        "source": { "const": "duckdb" },
+        "db_path": { "const": "/home/ubuntu/health_system.duckdb" },
+        "agent_id": { "type": "string" },
+        "timestamp": { "type": "string", "format": "date-time" },
+        "trace_id": { "type": "string" }
+      },
+      "additionalProperties": false
+    }
+  },
+  "allOf": [
+    {
+      "if": {
+        "properties": { "ok": { "const": true } },
+        "required": ["ok"]
+      },
+      "then": {
+        "properties": {
+          "data": { "type": "object" },
+          "error": { "type": "null" }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": { "ok": { "const": false } },
+        "required": ["ok"]
+      },
+      "then": {
+        "properties": {
+          "error": { "type": "object" },
+          "data": { "type": ["object", "null"] }
+        }
+      }
+    }
+  ],
+  "additionalProperties": false
+}

@@ -1,0 +1,33 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "{{TASK_ID}}.output",
+  "type": "object",
+  "required": ["protocol_version", "task", "ok", "data", "error", "meta"],
+  "properties": {
+    "protocol_version": { "type": "string" },
+    "task": { "type": "string" },
+    "ok": { "type": "boolean" },
+    "data": { "type": ["object", "null"] },
+    "error": {
+      "type": ["object", "null"],
+      "properties": {
+        "code": { "type": "string" },
+        "message": { "type": "string" }
+      },
+      "additionalProperties": true
+    },
+    "meta": {
+      "type": "object",
+      "required": ["timestamp", "trace_id", "agent_id"],
+      "properties": {
+        "source": { "type": "string" },
+        "db_path": { "type": "string" },
+        "timestamp": { "type": "string", "format": "date-time" },
+        "trace_id": { "type": "string" },
+        "agent_id": { "type": "string" }
+      },
+      "additionalProperties": false
+    }
+  },
+  "additionalProperties": false
+}

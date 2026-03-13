@@ -1,0 +1,111 @@
+version: 1.0
+status: draft
+
+agent:
+  id: "{{AGENT_ID}}"
+  name: "{{AGENT_NAME}}"
+  dimension: "{{DOMAIN}}"
+  description: "{{AGENT_DESCRIPTION}}"
+
+inherits:
+  capability_definitions: capabilities_standards/governance/capability_definitions.yaml
+  action_patterns_extension: capabilities_standards/agents/_agent_template/action_patterns.extension.yaml
+
+data_model:
+  table:
+    name: "{{PRIMARY_TABLE}}"
+  fields: "{{DATA_MODEL_FIELDS_LIST}}"
+
+targets:
+  enabled: true
+  source: "{{TARGET_SOURCE}}"
+  managed_by: "{{ORCHESTRATION_AGENT_ID}}"
+  runtime_source_of_truth: "{{TARGETS_TABLE}}"
+  target_selection_rule: "{{TARGET_SELECTION_RULE}}"
+  runtime_apply_scope: "{{RUNTIME_SCOPE}}"
+  fields: "{{TARGET_METRIC_FIELDS_LIST}}"
+  rules:
+    - immutable per interval
+    - forward-only updates
+
+delta:
+  enabled: true
+  calculated_at: write_time
+  formula: "actual - target"
+  stored: true
+  notes: "{{RENDER_TEMPLATE_HINT}}"
+
+capabilities:
+  log:
+    inherits: capability_definitions.log
+    extensible: true
+    subtypes:
+      - name: "{{SUBTYPE_NAME}}"
+        active: true
+        table: "{{ENTITY_TABLE}}"
+        binding:
+          id: "{{TASK_ID}}"
+          inference: "{{INFERENCE_POLICY}}"
+          correction_strategy: "{{CORRECTION_STRATEGY}}"
+          key: []
+          query_template: capabilities_standards/agents/_agent_template/tasks/_task_template/query.template.sql
+          execution_policy:
+            mode: template_first
+            inline_sql_fallback: allowed_on_explicit_template_failure_only
+            fallback_must_be_declared: true
+        overrides: []
+        extends: []
+
+  update:
+    inherits: capability_definitions.update
+    extensible: true
+    subtypes:
+      - name: "{{SUBTYPE_NAME}}"
+        active: true
+        table: "{{ENTITY_TABLE}}"
+        binding:
+          id: "{{TASK_ID}}"
+          inference: "{{INFERENCE_POLICY}}"
+          correction_strategy: "{{CORRECTION_STRATEGY}}"
+          key: ["{{PRIMARY_KEY_FIELD}}"]
+        overrides: []
+        extends: []
+
+  report:
+    inherits: capability_definitions.report
+    extensible: true
+    subtypes:
+      - name: "{{SUBTYPE_NAME}}"
+        active: true
+        table: "{{ENTITY_TABLE}}"
+        binding:
+          id: "{{TASK_ID}}"
+          query_template: capabilities_standards/agents/_agent_template/tasks/_task_template/query.template.sql
+        overrides: []
+        extends: []
+
+  analyze:
+    inherits: capability_definitions.analyze
+    extensible: true
+    subtypes:
+      - name: "{{SUBTYPE_NAME}}"
+        active: true
+        table: "{{ENTITY_TABLE}}"
+        binding:
+          id: "{{TASK_ID}}"
+          query_template: capabilities_standards/agents/_agent_template/tasks/_task_template/query.template.sql
+        overrides: []
+        extends: []
+
+  prescribe:
+    owned_by: "{{ORCHESTRATION_AGENT_ID}}"
+    this_agent_may: []
+    this_agent_cannot: []
+
+boundaries:
+  - trigger: "{{RENDER_TEMPLATE_HINT}}"
+    response: "<human_readable_error_message>"
+
+redirects:
+  - condition: cross-domain remainder
+    to: "{{ORCHESTRATION_AGENT_ID}}"

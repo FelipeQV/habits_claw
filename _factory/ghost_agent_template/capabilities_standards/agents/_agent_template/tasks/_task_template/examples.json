@@ -1,0 +1,39 @@
+[
+  {
+    "name": "success_response",
+    "response": {
+      "protocol_version": "{{PROTOCOL_VERSION}}",
+      "task": "{{TASK_ID}}",
+      "ok": true,
+      "data": {
+        "result": "{{RENDER_TEMPLATE_HINT}}"
+      },
+      "error": null,
+      "meta": {
+        "source": "duckdb",
+        "db_path": "{{DB_PATH}}",
+        "timestamp": "{{TIMESTAMP_ISO}}",
+        "agent_id": "{{AGENT_ID}}"
+      }
+    }
+  },
+  {
+    "name": "validation_error_response",
+    "response": {
+      "protocol_version": "{{PROTOCOL_VERSION}}",
+      "task": "{{TASK_ID}}",
+      "ok": false,
+      "data": null,
+      "error": {
+        "code": "VALIDATION_ERROR",
+        "message": "<human_readable_error_message>"
+      },
+      "meta": {
+        "source": "duckdb",
+        "db_path": "{{DB_PATH}}",
+        "timestamp": "{{TIMESTAMP_ISO}}",
+        "agent_id": "{{AGENT_ID}}"
+      }
+    }
+  }
+]

@@ -1,0 +1,77 @@
+[
+  {
+    "name": "success_response",
+    "response": {
+      "protocol_version": "1.0.0",
+      "task": "log_meal",
+      "ok": true,
+      "data": {
+        "meal_id": 123,
+        "date": "2026-03-09",
+        "time": "14:30:00",
+        "meal_type": "comida",
+        "food_description": "chicken salad",
+        "calories": 540,
+        "protein": 42,
+        "carbs": 28,
+        "fat": 24,
+        "macro_estimated": true,
+        "comments": "home-made"
+      },
+      "error": null,
+      "meta": {
+        "source": "duckdb",
+        "db_path": "/home/ubuntu/health_system.duckdb",
+        "timestamp": "2026-03-09T22:30:00Z",
+        "trace_id": "trace-abc123",
+        "agent_id": "mindy"
+      }
+    }
+  },
+  {
+    "name": "validation_error_response",
+    "response": {
+      "protocol_version": "1.0.0",
+      "task": "log_meal",
+      "ok": false,
+      "data": null,
+      "error": {
+        "code": "VALIDATION_ERROR",
+        "message": "Missing required field: food_description",
+        "details": {
+          "field": "food_description"
+        }
+      },
+      "meta": {
+        "source": "duckdb",
+        "db_path": "/home/ubuntu/health_system.duckdb",
+        "timestamp": "2026-03-09T22:31:00Z",
+        "trace_id": "trace-def456",
+        "agent_id": "mindy"
+      }
+    }
+  },
+  {
+    "name": "db_error_response",
+    "response": {
+      "protocol_version": "1.0.0",
+      "task": "log_meal",
+      "ok": false,
+      "data": null,
+      "error": {
+        "code": "DB_QUERY_ERROR",
+        "message": "Insert failed due to SQL constraint violation",
+        "details": {
+          "table": "meals"
+        }
+      },
+      "meta": {
+        "source": "duckdb",
+        "db_path": "/home/ubuntu/health_system.duckdb",
+        "timestamp": "2026-03-09T22:32:00Z",
+        "trace_id": "trace-ghi789",
+        "agent_id": "mindy"
+      }
+    }
+  }
+]

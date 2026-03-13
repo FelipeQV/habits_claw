@@ -1,0 +1,112 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "report_meal.output",
+  "type": "object",
+  "required": ["protocol_version", "task", "ok", "data", "error", "meta"],
+  "properties": {
+    "protocol_version": { "const": "1.0.0" },
+    "task": { "const": "report_meal" },
+    "ok": { "type": "boolean" },
+    "data": {
+      "type": ["object", "null"],
+      "required": ["scope_label", "scope_type", "meal_breakdown", "totals"],
+      "properties": {
+        "scope_label": { "type": "string" },
+        "scope_type": { "type": "string", "enum": ["single_day", "range", "ambiguous"] },
+        "meal_breakdown": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["meal", "kcal", "protein", "carbs", "fat", "fiber"],
+            "properties": {
+              "meal": { "type": "string" },
+              "kcal": { "type": ["number", "string", "null"] },
+              "protein": { "type": ["number", "string", "null"] },
+              "carbs": { "type": ["number", "string", "null"] },
+              "fat": { "type": ["number", "string", "null"] },
+              "fiber": { "type": ["number", "string", "null"] }
+            },
+            "additionalProperties": false
+          }
+        },
+        "totals": {
+          "type": "object",
+          "required": ["kcal_total", "protein_total", "carbs_total", "fat_total", "fiber_total", "meal_count", "estimation_rate"],
+          "properties": {
+            "kcal_total": { "type": ["number", "string", "null"] },
+            "protein_total": { "type": ["number", "string", "null"] },
+            "carbs_total": { "type": ["number", "string", "null"] },
+            "fat_total": { "type": ["number", "string", "null"] },
+            "fiber_total": { "type": ["number", "string", "null"] },
+            "fiber_note": { "type": "string" },
+            "meal_count": { "type": "integer", "minimum": 0 },
+            "estimation_rate": { "type": "number", "minimum": 0, "maximum": 100 }
+          },
+          "additionalProperties": false
+        },
+        "delta_to_target": {
+          "type": ["object", "null"],
+          "required": ["kcal_diff", "protein_diff", "carbs_diff", "fat_diff", "fiber_note"],
+          "properties": {
+            "kcal_diff": { "type": ["number", "string", "null"] },
+            "protein_diff": { "type": ["number", "string", "null"] },
+            "carbs_diff": { "type": ["number", "string", "null"] },
+            "fat_diff": { "type": ["number", "string", "null"] },
+            "fiber_note": { "type": "string" }
+          },
+          "additionalProperties": false
+        }
+      },
+      "additionalProperties": false
+    },
+    "error": {
+      "type": ["object", "null"],
+      "required": ["code", "message"],
+      "properties": {
+        "code": {
+          "type": "string",
+          "enum": [
+            "VALIDATION_ERROR",
+            "OUT_OF_SCOPE_TASK",
+            "UNAUTHORIZED",
+            "DB_CONNECTION_ERROR",
+            "DB_QUERY_ERROR",
+            "DB_CONFLICT",
+            "NOT_FOUND",
+            "INTERNAL_ERROR"
+          ]
+        },
+        "message": { "type": "string" }
+      },
+      "additionalProperties": true
+    },
+    "meta": {
+      "type": "object",
+      "required": ["timestamp", "trace_id"],
+      "properties": {
+        "source": { "const": "duckdb" },
+        "db_path": { "const": "/home/ubuntu/health_system.duckdb" },
+        "agent_id": { "type": "string" },
+        "timestamp": { "type": "string", "format": "date-time" },
+        "trace_id": { "type": "string" }
+      },
+      "additionalProperties": true
+    }
+  },
+  "allOf": [
+    {
+      "if": { "properties": { "ok": { "const": true } }, "required": ["ok"] },
+      "then": { "properties": { "data": { "type": "object" }, "error": { "type": "null" } } }
+    },
+    {
+      "if": { "properties": { "ok": { "const": false } }, "required": ["ok"] },
+      "then": {
+        "properties": {
+          "data": { "type": "null" },
+          "error": { "type": "object", "required": ["code", "message"] }
+        }
+      }
+    }
+  ],
+  "additionalProperties": false
+}

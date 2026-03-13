@@ -1,0 +1,78 @@
+[
+  {
+    "name": "success_response",
+    "response": {
+      "protocol_version": "1.0.0",
+      "task": "update_meal",
+      "ok": true,
+      "data": {
+        "previous_row_marked_corrected": true,
+        "new_row_appended": true,
+        "selector": {
+          "date": "2026-03-09",
+          "time": "14:30:00",
+          "meal_type": "comida"
+        },
+        "updated_fields": ["food_description", "calories", "comments"]
+      },
+      "error": null,
+      "meta": {
+        "source": "duckdb",
+        "db_path": "/home/ubuntu/health_system.duckdb",
+        "timestamp": "2026-03-10T21:00:00Z",
+        "trace_id": "trace-upd-abc123",
+        "agent_id": "mindy"
+      }
+    }
+  },
+  {
+    "name": "validation_error_response",
+    "response": {
+      "protocol_version": "1.0.0",
+      "task": "update_meal",
+      "ok": false,
+      "data": null,
+      "error": {
+        "code": "VALIDATION_ERROR",
+        "message": "Missing required field: updates",
+        "details": {
+          "field": "updates"
+        }
+      },
+      "meta": {
+        "source": "duckdb",
+        "db_path": "/home/ubuntu/health_system.duckdb",
+        "timestamp": "2026-03-10T21:01:00Z",
+        "trace_id": "trace-upd-def456",
+        "agent_id": "mindy"
+      }
+    }
+  },
+  {
+    "name": "not_found_response",
+    "response": {
+      "protocol_version": "1.0.0",
+      "task": "update_meal",
+      "ok": false,
+      "data": null,
+      "error": {
+        "code": "NOT_FOUND",
+        "message": "No meal found for selector date=2026-03-09 time=14:30:00 meal_type=comida",
+        "details": {
+          "selector": {
+            "date": "2026-03-09",
+            "time": "14:30:00",
+            "meal_type": "comida"
+          }
+        }
+      },
+      "meta": {
+        "source": "duckdb",
+        "db_path": "/home/ubuntu/health_system.duckdb",
+        "timestamp": "2026-03-10T21:02:00Z",
+        "trace_id": "trace-upd-ghi789",
+        "agent_id": "mindy"
+      }
+    }
+  }
+]

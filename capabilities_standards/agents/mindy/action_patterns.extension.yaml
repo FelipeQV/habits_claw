@@ -1,0 +1,47 @@
+version: 1.0
+status: draft
+agent: mindy
+extends: capabilities_standards/governance/action_patterns.yaml
+
+orchestration_patterns:
+  nutrition_target_update:
+    purpose: update nutrition targets from a new nutritionist PDF with historical integrity
+    trigger: explicit user-provided new nutritionist PDF
+    steps:
+      - ingest new source PDF
+      - extract and verify kcal/protein/carbs/fat values
+      - write a new versioned JSON file under capabilities_standards/targets/
+      - insert new row in nutrition_targets with effective_from and source refs
+      - close previous active nutrition target row by setting effective_to
+      - validate only one active nutrition target row remains
+      - run smoke checks via report/analyze to confirm new targets are used
+    controls:
+      - do not overwrite historical versioned JSON files
+      - do not mutate historical nutrition target rows except setting effective_to on the previously active row
+      - require explicit user confirmation before DB writes
+    verification:
+      - active_target_row_count_equals_1
+      - latest_row_matches_expected_values
+      - report_and_analyze_reflect_new_target
+      - runtime_query_must_hit_nutrition_targets_table
+
+actions:
+  report:
+    suggested_behavior:
+      input:
+        - timeframe selector (date or from/to)
+        - optional meal_type filter
+      output:
+        - totals (calories/protein/carbs/fat)
+        - meal_count
+        - estimation_rate
+        - entries list
+      scope:
+        - nutrition-only
+        - no causal claims
+
+  analyze:
+    suggested_behavior:
+      scope:
+        - nutrition-only
+        - no causal claims

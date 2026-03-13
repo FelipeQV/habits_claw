@@ -1,0 +1,5 @@
+version: "1.0"
+status: placeholder
+agent:
+  id: jim
+inherits: capabilities_standards/governance/agent_spec_template.yaml

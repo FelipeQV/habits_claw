@@ -1,0 +1,38 @@
+{
+ "schema_version": "1.0",
+ "source": {
+ "type": "pdf",
+ "file": "Felipe_Quintana_Noviembre_2025.pdf",
+ "nutritionist": "Jose Rueda"
+ },
+ "plan": {
+ "start": "2025-11",
+ "next_revision": "2026-02"
+ },
+ "general_data": {
+ "weight_kg": 83.9,
+ "height_m": 1.87,
+ "age": 36,
+ "goal": "fat_loss",
+ "body_fat_pct": 17.6,
+ "body_fat_kg": 13.9,
+ "lean_mass_kg": 70.0,
+ "bmi": 24,
+ "waist_hip_index": 0.91
+ },
+ "tracked_metrics": ["calories", "protein", "carbs", "fat", "fiber"],
+ "target_metrics": {
+ "calories": 1900,
+ "protein": 160,
+ "carbs": 180,
+ "fat": 60
+ },
+ "units": {
+ "calories": "kcal",
+ "protein": "g",
+ "carbs": "g",
+ "fat": "g",
+ "fiber": "g"
+ },
+ "priorities": ["calories", "protein", "carbs", "fat"]
+}

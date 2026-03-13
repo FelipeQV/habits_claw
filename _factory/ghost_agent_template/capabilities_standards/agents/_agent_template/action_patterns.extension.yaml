@@ -1,0 +1,41 @@
+version: 1.0
+status: draft
+agent: "{{AGENT_ID}}"
+extends: capabilities_standards/governance/action_patterns.yaml
+
+orchestration_patterns:
+  generic_target_update:
+    purpose: update target artifacts with historical integrity
+    trigger: explicit user-provided source artifact
+    steps:
+      - ingest source artifact
+      - extract and validate target payload
+      - write new versioned target artifact
+      - insert new row into "{{TARGETS_TABLE}}"
+      - close previous active row using policy
+      - verify a single active row remains
+    controls:
+      - do not overwrite historical artifacts
+      - require explicit confirmation before write operations
+    verification:
+      - active_target_row_count_equals_1
+      - latest_row_matches_expected_values
+      - runtime_queries_resolve_target_table
+
+actions:
+  report:
+    suggested_behavior:
+      input:
+        - timeframe selector
+        - optional subtype filter
+      output:
+        - totals
+        - record_count
+        - estimation_rate
+        - entries list
+
+  analyze:
+    suggested_behavior:
+      scope:
+        - domain-only
+        - non-definitive findings with confidence

@@ -1,0 +1,111 @@
+[
+  {
+    "name": "success_response_last_n_meals",
+    "input": {
+      "task": "report_meal",
+      "last_n_meals": 9,
+      "include_entries": true
+    },
+    "response": {
+      "protocol_version": "1.0.0",
+      "task": "report_meal",
+      "ok": true,
+      "data": {
+        "timeframe": {
+          "mode": "last_n_meals",
+          "last_n_meals": 9,
+          "from": "2026-03-08",
+          "to": "2026-03-10"
+        },
+        "totals": {
+          "calories": 3450,
+          "protein": 212,
+          "carbs": 368,
+          "fat": 111
+        },
+        "meal_count": 9,
+        "estimation_rate": 0.33,
+        "entries": [
+          {
+            "date": "2026-03-10",
+            "time": "08:10:00",
+            "meal_type": "desayuno",
+            "food_description": "Huevos con frijoles y tortilla",
+            "calories": 520,
+            "protein": 30,
+            "carbs": 44,
+            "fat": 24,
+            "macro_estimated": false,
+            "corrected": 0,
+            "comments": "Sin aceite extra"
+          },
+          {
+            "date": "2026-03-10",
+            "time": "13:45:00",
+            "meal_type": "comida",
+            "food_description": "Pollo asado con arroz y ensalada",
+            "calories": 690,
+            "protein": 52,
+            "carbs": 63,
+            "fat": 22,
+            "macro_estimated": true,
+            "corrected": 0,
+            "comments": "Porciones estimadas"
+          }
+        ],
+        "data_quality": {
+          "level": "mid",
+          "reason": "Parte de los macros fueron estimados en 3 de 9 comidas"
+        }
+      },
+      "error": null,
+      "meta": {
+        "source": "duckdb",
+        "db_path": "/home/ubuntu/health_system.duckdb",
+        "agent_id": "mindy",
+        "timestamp": "2026-03-10T20:15:00Z",
+        "trace_id": "trace-report-meal-001"
+      }
+    }
+  },
+  {
+    "name": "validation_error_response",
+    "response": {
+      "protocol_version": "1.0.0",
+      "task": "report_meal",
+      "ok": false,
+      "data": null,
+      "error": {
+        "code": "VALIDATION_ERROR",
+        "message": "Provide exactly one timeframe selector: date OR from+to OR last_n_meals."
+      },
+      "meta": {
+        "source": "duckdb",
+        "db_path": "/home/ubuntu/health_system.duckdb",
+        "agent_id": "mindy",
+        "timestamp": "2026-03-10T20:16:00Z",
+        "trace_id": "trace-report-meal-002"
+      }
+    }
+  },
+  {
+    "name": "db_error_response",
+    "response": {
+      "protocol_version": "1.0.0",
+      "task": "report_meal",
+      "ok": false,
+      "data": null,
+      "error": {
+        "code": "DB_QUERY_ERROR",
+        "message": "Failed to compute nutrition totals from meals table."
+      },
+      "meta": {
+        "source": "duckdb",
+        "db_path": "/home/ubuntu/health_system.duckdb",
+        "agent_id": "mindy",
+        "timestamp": "2026-03-10T20:17:00Z",
+        "trace_id": "trace-report-meal-003"
+      }
+    }
+  }
+]

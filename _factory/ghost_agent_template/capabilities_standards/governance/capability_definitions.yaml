@@ -1,0 +1,80 @@
+version: 1.0
+status: active
+
+capability_rendering:
+  emoji_map:
+    log: "✏️"
+    update: "📝"
+    report: "📖"
+    analyze: "📈"
+    prescribe: "🔮"
+    prescribe_delegation: "🧭"
+  user_facing_rules:
+    - user-facing responses should start with canonical capability marker when applicable
+    - never expose internal capability/task labels in user-facing text
+
+subtype_convention:
+  definition: "Subtype is a discrete unit of action within a capability."
+  inheritance_model:
+    inherits: all default rules from parent capability
+    overrides: replace inherited default rules
+    extends: add rules on top of inherited defaults
+  extensible: true
+  required_binding_fields:
+    - id
+    - inference
+    - correction_strategy
+
+capability_definitions:
+  log:
+    purpose: capture new factual events
+    principles:
+      - prioritize accuracy over interpretation
+      - do not mix with analysis/prescription
+    default_rules:
+      - timestamp is agent-generated unless provided
+      - inference policy must come from subtype binding
+      - inferred values must be flagged
+
+  update:
+    purpose: correct or enrich existing records with auditability
+    principles:
+      - preserve history
+      - make corrections explicit
+    correction_strategies:
+      values: [append_only, upsert_by_key]
+      default: append_only
+    default_rules:
+      - follow subtype correction strategy
+      - avoid destructive overwrite outside declared strategy
+
+  report:
+    purpose: provide factual summaries over a selector
+    principles:
+      - descriptive outputs only
+      - no causal claims or prescriptions
+    default_rules:
+      - include data_quality context
+      - keep domain scope boundaries
+
+  analyze:
+    purpose: generate evidence-based, non-definitive findings
+    principles:
+      - include confidence level + basis
+      - remain within domain boundaries
+    default_rules:
+      - return confidence for all analysis outputs
+      - redirect cross-domain remainder to orchestration agent
+
+  prescribe:
+    purpose: propose bounded strategic experiments
+    principles:
+      - orchestration-owned unless explicitly delegated
+      - policy-compliant recommendations only
+    default_rules:
+      - delegation must be explicit via allowlist
+
+prescribe_delegation:
+  default_owner: "{{ORCHESTRATION_AGENT_ID}}"
+  allowlist_managed_by: user
+  allowlist: []

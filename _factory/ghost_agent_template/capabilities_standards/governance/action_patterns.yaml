@@ -1,0 +1,68 @@
+version: 1.0
+status: draft
+scope: cross-agent
+
+purpose: define minimum implementation patterns for capability actions
+
+references:
+  capability_definitions: capabilities_standards/governance/capability_definitions.yaml
+  protocol_readme: capabilities_standards/protocol/README.md
+  shared_error_codes: capabilities_standards/protocol/errors.json
+
+global_conventions:
+  task_id_pattern: "<action>_<entity>"
+  file_layout:
+    base: "capabilities_standards/agents/<agent>/tasks/<task>/"
+    required_files:
+      - input.schema.json
+      - output.schema.json
+      - output.format.md
+      - examples.json
+      - query.template.sql
+  output_envelope_ref: capabilities_standards/protocol/README.md
+
+actions:
+  log:
+    intent: capture new factual events
+    access_mode: write_append
+    required_controls:
+      - inference policy must come from subtype binding
+      - if inferred, estimation must be flagged
+      - execute subtype query template by default
+
+  update:
+    intent: correct existing records explicitly
+    access_mode: write_correction
+    required_controls:
+      - correction strategy must come from subtype binding
+      - no destructive overwrite outside declared strategy
+
+  report:
+    intent: provide factual summaries
+    access_mode: read_only
+    required_controls:
+      - include data_quality context
+      - no prescriptions
+      - execute subtype query template by default
+
+  analyze:
+    intent: identify within-domain patterns
+    access_mode: read_only
+    required_controls:
+      - include confidence.level and confidence.basis
+      - keep findings non-definitive
+      - redirect cross-domain remainder
+
+  prescribe:
+    intent: propose strategic experiments
+    access_mode: optional_log_only
+    required_controls:
+      - owned by orchestration agent unless delegated
+
+activation_gate:
+  must_pass:
+    - input schema exists and validates
+    - output schema exists and validates
+    - examples include success and error case
+    - task declared in agent spec binding
+    - protocol docs aligned

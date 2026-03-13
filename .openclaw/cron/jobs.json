@@ -1,0 +1,79 @@
+{
+  "version": 1,
+  "jobs": [
+    {
+      "id": "043947a7-10f1-42c6-96bf-100596bcb74f",
+      "agentId": "main",
+      "name": "Jim AM check-in 07:30",
+      "enabled": true,
+      "notify": true,
+      "createdAtMs": 1771880824521,
+      "updatedAtMs": 1773322219564,
+      "schedule": {
+        "kind": "cron",
+        "expr": "30 7 * * *",
+        "tz": "America/Mexico_City"
+      },
+      "sessionTarget": "isolated",
+      "wakeMode": "now",
+      "payload": {
+        "kind": "agentTurn",
+        "message": "This is a daily morning reminder for Felipe. Tone: natural, fluid, concise, warm (not robotic). IMPORTANT: do not propose new questions and do not modify the flow structure. Background fixed, form fluid. Ask exactly: (1) sleep hours + sleep quality in one message, (2) dream note as optional. Then close shortly.",
+        "thinking": "low",
+        "timeoutSeconds": 120
+      },
+      "delivery": {
+        "mode": "announce",
+        "channel": "telegram",
+        "to": "1382515788"
+      },
+      "state": {
+        "nextRunAtMs": 1773408600000,
+        "lastRunAtMs": 1773322200024,
+        "lastStatus": "ok",
+        "lastDurationMs": 19540,
+        "consecutiveErrors": 0,
+        "lastRunStatus": "ok",
+        "lastDelivered": true,
+        "lastDeliveryStatus": "delivered"
+      }
+    },
+    {
+      "id": "21b9903c-fe08-43eb-9ad8-62636f6c11d6",
+      "agentId": "main",
+      "name": "Jim PM check-in 21:00",
+      "enabled": true,
+      "notify": true,
+      "createdAtMs": 1771880834197,
+      "updatedAtMs": 1773370863750,
+      "schedule": {
+        "kind": "cron",
+        "expr": "0 21 * * *",
+        "tz": "America/Mexico_City"
+      },
+      "sessionTarget": "isolated",
+      "wakeMode": "now",
+      "payload": {
+        "kind": "agentTurn",
+        "message": "This is the nightly 9:00 PM routine reminder for Felipe (CDMX). Send the message in Spanish with this tone: friendly collaborator, reserved, not gossipy, light humor only, never overfamiliar, brief and honest encouragement when useful. Goal: complete daily_log for today.\n\nOperational rules:\n1) First, use known context before asking (e.g., gym from Kevin if available; meal status from Mindy if available).\n2) If dinner is missing in Mindy for today, ask naturally: \"¿Qué cenaste hoy?\" Then instruct Felipe briefly to log it in Mindy using New, or confirm it if already logged.\n3) Ask only what is still missing, one question at a time, conversationally.\n4) Avoid technical variable names unless needed. Prefer natural phrasing.\n   - Example: \"¿Cómo estuvo tu energía hoy, del 1 al 5?\"\n   - For social, use: \"¿Hiciste algo social hoy?\"\n5) Night routine should focus on non-sleep fields:\n   date, gym(0/1), yoga(0/1), steps, energy(1-5), mood(1-5), social(0/1), social_note, meditation(0/1), summary.\n6) Conditional fallback from morning check:\n   - If sleep_hours and/or sleep_quality are missing for today, OPEN the night check with those missing sleep items first.\n   - Do NOT ask dream_note at night.\n7) End with a short natural confirmation that the check is complete. Do not dump CSV unless Felipe asks.",
+        "thinking": "low",
+        "timeoutSeconds": 150
+      },
+      "delivery": {
+        "mode": "announce",
+        "channel": "telegram",
+        "to": "1382515788"
+      },
+      "state": {
+        "nextRunAtMs": 1773457200000,
+        "lastRunAtMs": 1773370800035,
+        "lastStatus": "ok",
+        "lastDurationMs": 63715,
+        "consecutiveErrors": 0,
+        "lastRunStatus": "ok",
+        "lastDelivered": true,
+        "lastDeliveryStatus": "delivered"
+      }
+    }
+  ]
+}
