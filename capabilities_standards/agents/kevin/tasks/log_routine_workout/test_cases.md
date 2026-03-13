@@ -1,0 +1,2 @@
+- Success case: mark routine_day 3 completed -> row created.  
+- Correction case: toggle completed false then true via `update_routine_workout`.  

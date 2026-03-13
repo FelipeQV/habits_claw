@@ -1,0 +1,2 @@
+- Success case: 30 minutes run -> `record_id` returns and DB row inserted.  
+- Validation case: negative minutes -> returns VALIDATION_ERROR.  

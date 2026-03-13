@@ -1,0 +1,23 @@
+[
+  {
+    "name": "success",
+    "response": {
+      "protocol_version": "1.0.0",
+      "task": "log_routine_workout",
+      "ok": true,
+      "data": {
+        "routine_day": 3,
+        "completed": true,
+        "record_id": "routine-2026-03-13-003"
+      },
+      "error": null,
+      "meta": {
+        "source": "duckdb",
+        "db_path": "/home/ubuntu/health_system.duckdb",
+        "agent_id": "kevin",
+        "timestamp": "2026-03-13T12:10:00Z",
+        "trace_id": "trace-routine-001"
+      }
+    }
+  }
+]

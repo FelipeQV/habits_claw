@@ -1,0 +1,4 @@
+name: analyze_workout
+description: Generates descriptive adherence insights with confidence annotations.
+purpose: surface patterns for Felipe without prescribing changes (delegation reserved for orchestration).
+access_mode: read_only

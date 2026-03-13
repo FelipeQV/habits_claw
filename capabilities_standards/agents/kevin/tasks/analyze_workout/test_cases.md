@@ -1,0 +1,2 @@
+- Range insight: request past week, confirm findings string references cardio/routine trends.  
+- Confidence check: ensure response includes `confidence.level` and `basis`.  

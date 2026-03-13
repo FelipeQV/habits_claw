@@ -1,0 +1,23 @@
+[
+  {
+    "name": "success",
+    "response": {
+      "protocol_version": "1.0.0",
+      "task": "update_cardio",
+      "ok": true,
+      "data": {
+        "record_id": "cardio-2026-03-13-001",
+        "cardio_minutes": 25,
+        "cardio_type": "run"
+      },
+      "error": null,
+      "meta": {
+        "source": "duckdb",
+        "db_path": "/home/ubuntu/health_system.duckdb",
+        "agent_id": "kevin",
+        "timestamp": "2026-03-13T13:00:00Z",
+        "trace_id": "trace-cardio-003"
+      }
+    }
+  }
+]

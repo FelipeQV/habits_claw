@@ -1,0 +1,26 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "log_routine_workout.input",
+  "type": "object",
+  "required": ["routine_day", "completed"],
+  "properties": {
+    "routine_day": {
+      "type": "integer",
+      "minimum": 1
+    },
+    "completed": {
+      "type": "boolean"
+    },
+    "notes": {
+      "type": "string"
+    },
+    "record_id": {
+      "type": "string"
+    },
+    "date": {
+      "type": "string",
+      "pattern": "^\\d{4}-\\d{2}-\\d{2}$"
+    }
+  },
+  "additionalProperties": false
+}

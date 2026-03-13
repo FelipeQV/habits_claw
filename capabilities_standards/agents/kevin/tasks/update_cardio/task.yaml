@@ -1,0 +1,4 @@
+name: update_cardio
+description: Corrects an existing cardio entry while preserving historical audit via append-only strategy.
+purpose: keep cardio minute history accurate for reporting.
+access_mode: write_correction

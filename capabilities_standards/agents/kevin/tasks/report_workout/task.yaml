@@ -1,0 +1,4 @@
+name: report_workout
+description: Summarizes cardio/routine adherence for a date or range while deriving Jim’s fields.
+purpose: feed daily log and user reporting surfaces with accurate totals.
+access_mode: read_only

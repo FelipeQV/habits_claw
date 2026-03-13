@@ -1,0 +1,12 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "update_routine_workout.input",
+  "type": "object",
+  "required": ["record_id", "completed"],
+  "properties": {
+    "record_id": { "type": "string" },
+    "completed": { "type": "boolean" },
+    "notes": { "type": "string" }
+  },
+  "additionalProperties": false
+}

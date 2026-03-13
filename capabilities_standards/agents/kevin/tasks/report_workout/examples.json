@@ -1,0 +1,27 @@
+[
+  {
+    "name": "day_summary",
+    "response": {
+      "protocol_version": "1.0.0",
+      "task": "report_workout",
+      "ok": true,
+      "data": {
+        "summary": "Cardio run and routine day completed.",
+        "totals": {
+          "cardio_minutes": 30,
+          "routine_days": 1
+        },
+        "workout_done": true,
+        "cardio_total_min": 30
+      },
+      "error": null,
+      "meta": {
+        "source": "duckdb",
+        "db_path": "/home/ubuntu/health_system.duckdb",
+        "agent_id": "kevin",
+        "timestamp": "2026-03-13T18:00:00Z",
+        "trace_id": "trace-report-001"
+      }
+    }
+  }
+]

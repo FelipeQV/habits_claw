@@ -1,0 +1,27 @@
+[
+  {
+    "name": "insight",
+    "response": {
+      "protocol_version": "1.0.0",
+      "task": "analyze_workout",
+      "ok": true,
+      "data": {
+        "findings": [
+          "Routine adherence is perfect but cardio minutes lag by 15 min/day compared to target."
+        ],
+        "confidence": {
+          "level": "mid",
+          "basis": "Three consecutive days with cardio < 15 min."
+        }
+      },
+      "error": null,
+      "meta": {
+        "source": "duckdb",
+        "db_path": "/home/ubuntu/health_system.duckdb",
+        "agent_id": "kevin",
+        "timestamp": "2026-03-13T19:00:00Z",
+        "trace_id": "trace-analyze-001"
+      }
+    }
+  }
+]

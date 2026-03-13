@@ -1,0 +1,43 @@
+[
+  {
+    "name": "success",
+    "response": {
+      "protocol_version": "1.0.0",
+      "task": "log_cardio",
+      "ok": true,
+      "data": {
+        "cardio_minutes": 30,
+        "cardio_type": "run",
+        "record_id": "cardio-2026-03-13-001"
+      },
+      "error": null,
+      "meta": {
+        "source": "duckdb",
+        "db_path": "/home/ubuntu/health_system.duckdb",
+        "agent_id": "kevin",
+        "timestamp": "2026-03-13T12:00:00Z",
+        "trace_id": "trace-cardio-001"
+      }
+    }
+  },
+  {
+    "name": "validation_error",
+    "response": {
+      "protocol_version": "1.0.0",
+      "task": "log_cardio",
+      "ok": false,
+      "data": null,
+      "error": {
+        "code": "VALIDATION_ERROR",
+        "message": "Minutes must be a non-negative integer."
+      },
+      "meta": {
+        "source": "duckdb",
+        "db_path": "/home/ubuntu/health_system.duckdb",
+        "agent_id": "kevin",
+        "timestamp": "2026-03-13T12:01:00Z",
+        "trace_id": "trace-cardio-002"
+      }
+    }
+  }
+]

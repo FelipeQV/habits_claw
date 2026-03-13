@@ -1,0 +1,19 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "update_cardio.input",
+  "type": "object",
+  "required": ["record_id", "minutes"],
+  "properties": {
+    "record_id": {
+      "type": "string"
+    },
+    "minutes": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "cardio_type": {
+      "type": "string"
+    }
+  },
+  "additionalProperties": false
+}

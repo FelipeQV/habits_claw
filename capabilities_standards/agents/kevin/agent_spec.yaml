@@ -1,0 +1,97 @@
+version: 1.0
+status: draft
+
+agent:
+  id: kevin
+  name: Kevin
+  dimension: workout
+  description: >
+    Owns cardio and routine workout recordings, corrections, and reporting/analyze outputs for downstream daily logs.
+
+inherits:
+  capability_definitions: capabilities_standards/governance/capability_definitions.yaml
+
+data_model:
+  table:
+    name: kevin_workouts
+  fields:
+    - name: date
+      type: date
+      set_by: agent
+    - name: cardio_minutes
+      type: integer
+      set_by: agent
+    - name: cardio_type
+      type: string
+      set_by: user
+    - name: routine_completed
+      type: boolean
+      set_by: agent
+    - name: corrected
+      type: boolean
+      set_by: agent
+    - name: record_id
+      type: string
+      set_by: agent
+      notes: places unique token for each row
+
+targets:
+  enabled: false
+
+capabilities:
+  log:
+    inherits: capability_definitions.log
+    subtypes:
+      - name: cardio
+        active: true
+        table: workouts
+        binding:
+          id: log_cardio
+          inference: estimate_allowed_with_flag
+          correction_strategy: append_only
+      - name: routine
+        active: true
+        table: workouts
+        binding:
+          id: log_routine_workout
+          inference: estimate_allowed_with_flag
+          correction_strategy: append_only
+
+  update:
+    inherits: capability_definitions.update
+    subtypes:
+      - name: cardio
+        active: true
+        table: workouts
+        binding:
+          id: update_cardio
+          inference: estimate_allowed_with_flag
+          correction_strategy: append_only
+      - name: routine
+        active: true
+        table: workouts
+        binding:
+          id: update_routine_workout
+          inference: estimate_allowed_with_flag
+          correction_strategy: append_only
+
+  report:
+    inherits: capability_definitions.report
+    subtypes:
+      - name: workout
+        active: true
+        table: workouts
+        binding:
+          id: report_workout
+
+  analyze:
+    inherits: capability_definitions.analyze
+    subtypes:
+      - name: workout
+        active: true
+        table: workouts
+        binding:
+          id: analyze_workout
+
+  prescribe:
+    owned_by: orchestration_agent

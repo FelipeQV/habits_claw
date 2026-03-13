@@ -1,0 +1,42 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "log_cardio.output",
+  "type": "object",
+  "required": ["protocol_version", "task", "ok", "data", "error", "meta"],
+  "properties": {
+    "protocol_version": { "const": "1.0.0" },
+    "task": { "const": "log_cardio" },
+    "ok": { "type": "boolean" },
+    "data": {
+      "type": ["object", "null"],
+      "required": ["cardio_minutes", "cardio_type"],
+      "properties": {
+        "cardio_minutes": { "type": "integer" },
+        "cardio_type": { "type": "string" },
+        "record_id": { "type": "string" }
+      },
+      "additionalProperties": false
+    },
+    "error": {
+      "type": ["object", "null"],
+      "properties": {
+        "code": { "type": "string" },
+        "message": { "type": "string" }
+      },
+      "additionalProperties": false
+    },
+    "meta": {
+      "type": "object",
+      "required": ["timestamp", "trace_id"],
+      "properties": {
+        "source": { "const": "duckdb" },
+        "db_path": { "const": "/home/ubuntu/health_system.duckdb" },
+        "agent_id": { "const": "kevin" },
+        "timestamp": { "type": "string" },
+        "trace_id": { "type": "string" }
+      },
+      "additionalProperties": false
+    }
+  },
+  "additionalProperties": false
+}

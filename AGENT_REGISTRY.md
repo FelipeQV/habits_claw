@@ -5,7 +5,7 @@
 | main | Main | orchestration | Primary orchestration agent handling routing and coordination across agents. | active | webchat | — | — | routing, coordination | — |
 | jim | Jim | daily_management | Daily management agent for journaling and routine tracking workflows. | active | telegram | capabilities_standards/agents/jim/agent_spec.yaml | 1.3 | log_daily_log (planned) | — |
 | mindy | Mindy | nutrition | Nutrition tracking agent for meal logging and meal update operations. | active | telegram | capabilities_standards/agents/mindy/agent_spec.yaml | 1.3 | log_meal, update_meal | DuckDB-only enforcement is active. |
-| kevin | Kevin | workout | Workout agent for training-related logging and workflow support. | active | telegram | — | — | pending standardization | — |
+| kevin | Kevin | workout | Workout agent for training-related logging and workflow support. | active | telegram | capabilities_standards/agents/kevin/agent_spec.yaml | 1.0 | log_cardio, log_routine_workout, report_workout, analyze_workout | pending updates to regressions |
 | automation | Automation Agent | file_operations | Internal automation agent responsible for file operations and workspace mutations. | active | internal | — | — | file mutations | Delegated file mutations. |
 
 ## Conventions

@@ -1,0 +1,2 @@
+- Success case: update existing cardio record to new minutes; ensure old row flagged `corrected=1`.  
+- Lineage check: confirm new row appended with `record_id` suffix.  

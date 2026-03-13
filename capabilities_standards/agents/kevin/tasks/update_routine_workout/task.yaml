@@ -1,0 +1,4 @@
+name: update_routine_workout
+description: Adjusts routine completion state through the append-only correction chain.
+purpose: maintain routine execution accuracy without deleting history.
+access_mode: write_correction

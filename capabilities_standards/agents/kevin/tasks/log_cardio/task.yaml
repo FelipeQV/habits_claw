@@ -1,0 +1,4 @@
+name: log_cardio
+description: Logs cardio sessions with minutes/type and feeds `workout_done`/`cardio_total_min`.
+purpose: capture cardio activities and flag record for downstream reporting.
+access_mode: write_append
