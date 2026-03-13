@@ -1,0 +1,38 @@
+# =========================
+# IGNORE (runtime state)
+# =========================
+.openclaw/logs/
+.openclaw/media/
+.openclaw/delivery-queue/
+.openclaw/subagents/
+.openclaw/devices/
+.openclaw/identity/
+.openclaw/update-check.json
+
+# =========================
+# IGNORE (secrets)
+# =========================
+.openclaw/credentials/
+.openclaw/telegram/
+*.pem
+*.key
+.env
+.env.*
+
+# =========================
+# IGNORE (runtime data)
+# =========================
+*.duckdb
+*.sqlite
+*.db
+
+# =========================
+# IGNORE (temporary files)
+# =========================
+*.bak
+*.backup
+*.tmp
+node_modules/
+.vscode/
+.DS_Store
+Thumbs.db
