@@ -9,8 +9,8 @@
 | sleep_quality | `integer 1-5` or empty | AM check-in (fallback PM only if AM missing) |  |
 | dream_note | `string` or empty | AM check-in (fallback PM only if AM missing) | optional |
 | meditation_done | `yes|no` | PM check-in |  |
-| workout_done | `yes|no` | Kevin (`workouts.csv`, derived) | `yes` if workout rows exist for date |
-| cardio_total_min | `integer >= 0` or empty | Kevin (`workouts.csv`, derived) | sum of `cardio_min` |
+| workout_done | `yes|no` | Kevin (`kevin_workouts` table in `/home/ubuntu/health_system.duckdb`, derived) | `yes` if workout rows exist for date |
+| cardio_total_min | `integer >= 0` or empty | Kevin (`kevin_workouts` table in `/home/ubuntu/health_system.duckdb`, derived) | sum of `cardio_minutes` |
 | yoga_done | `yes|no` | PM check-in | independent from Kevin |
 | steps | `integer >= 0` or empty | PM check-in | end-of-day capture |
 | energy | `integer 1-5` | PM check-in |  |
