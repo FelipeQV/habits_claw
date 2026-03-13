@@ -6,7 +6,10 @@ agent:
   name: Kevin
   dimension: workout
   description: >
-    Owns cardio and routine workout recordings, corrections, and reporting/analyze outputs for downstream daily logs.
+    Orchestrates Felipe's gym routine workflow by referencing the block plan in
+    /home/ubuntu/habit_tracker/reference/routine_workout.json (PDF source:
+    "Plan entrenamiento Bloque 2 Felipe Quintana noviembre 2025-1.pdf"), delivering day-specific
+    exercises, step-by-step weights guidance, and YouTube demos while recalling prior set weights.
 
 inherits:
   capability_definitions: capabilities_standards/governance/capability_definitions.yaml
@@ -24,6 +27,43 @@ data_model:
     - name: cardio_type
       type: string
       set_by: user
+    - name: yoga_type
+      type: string
+      set_by: user
+    - name: routine_block
+      type: string
+      set_by: agent
+    - name: routine_day
+      type: integer
+      set_by: agent
+    - name: exercise_name
+      type: string
+      set_by: agent
+    - name: exercise_order
+      type: integer
+      set_by: agent
+    - name: sets_target
+      type: integer
+      set_by: agent
+    - name: reps_target
+      type: string
+      set_by: agent
+    - name: youtube_link
+      type: string
+      set_by: agent
+    - name: previous_weight
+      type: number
+      set_by: agent
+    - name: previous_reps
+      type: string
+      set_by: agent
+    - name: current_weight
+      type: number
+      set_by: user
+    - name: routine_source_file
+      type: string
+      set_by: agent
+      notes: Points to the JSON derived from the PDF plan
     - name: routine_completed
       type: boolean
       set_by: agent
@@ -36,62 +76,80 @@ data_model:
       notes: places unique token for each row
 
 targets:
-  enabled: false
+  enabled: true
+  nodes:
+    - name: routine_adherence
+      description: Keeps Felipe aligned with the correct day, order, and exercise targets as defined by
+        the JSON plan.
 
 capabilities:
   log:
     inherits: capability_definitions.log
     subtypes:
-      - name: cardio
+      - name: routine_session
+        active: true
+        table: workouts
+        binding:
+          id: log_routine_session
+          inference: estimate_allowed_with_flag
+          correction_strategy: append_only
+      - name: cardio_run
         active: true
         table: workouts
         binding:
           id: log_cardio
           inference: estimate_allowed_with_flag
           correction_strategy: append_only
-      - name: routine
+      - name: yoga_session
         active: true
         table: workouts
         binding:
-          id: log_routine_workout
+          id: log_yoga
           inference: estimate_allowed_with_flag
           correction_strategy: append_only
 
   update:
     inherits: capability_definitions.update
     subtypes:
-      - name: cardio
+      - name: routine_weight
+        active: true
+        table: workouts
+        binding:
+          id: update_exercise_weight
+          inference: estimate_allowed_with_flag
+          correction_strategy: append_only
+      - name: cardio_run
         active: true
         table: workouts
         binding:
           id: update_cardio
           inference: estimate_allowed_with_flag
           correction_strategy: append_only
-      - name: routine
+      - name: yoga_session
         active: true
         table: workouts
         binding:
-          id: update_routine_workout
+          id: update_yoga
           inference: estimate_allowed_with_flag
           correction_strategy: append_only
 
   report:
     inherits: capability_definitions.report
     subtypes:
-      - name: workout
+      - name: routine_progress
         active: true
         table: workouts
         binding:
-          id: report_workout
+          id: report_routine_progress
 
   analyze:
     inherits: capability_definitions.analyze
     subtypes:
-      - name: workout
+      - name: routine
         active: true
         table: workouts
         binding:
-          id: analyze_workout
+          id: analyze_routine
 
   prescribe:
     owned_by: orchestration_agent
