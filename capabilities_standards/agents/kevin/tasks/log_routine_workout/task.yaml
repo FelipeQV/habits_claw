@@ -1,4 +1,4 @@
 name: log_routine_workout
-description: Records whether a routine day execution was completed, aligned to `routine_workout.json`.
-purpose: capture structured routine adherence without altering the original schedule.
+description: Records whether a routine day execution was completed, aligned to the active versioned routine JSON.
+purpose: capture structured routine adherence against the active versioned routine schedule resolved via `routine_workout.active.json`.
 access_mode: write_append
