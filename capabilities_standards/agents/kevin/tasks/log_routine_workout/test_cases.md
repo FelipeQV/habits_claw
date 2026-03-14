@@ -1,2 +1,3 @@
 - Success case: mark routine_day 3 completed -> row created.  
 - Correction case: toggle completed false then true via `update_routine_workout`.  
+- Weight memory case: log routine with `exercise_name` + `current_weight` and verify row inserted in `kevin_exercise_history`.  

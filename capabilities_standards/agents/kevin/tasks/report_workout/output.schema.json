@@ -21,7 +21,20 @@
           }
         },
         "workout_done": { "type": "boolean" },
-        "cardio_total_min": { "type": "integer" }
+        "cardio_total_min": { "type": "integer" },
+        "previous_exercise": {
+          "type": ["object", "null"],
+          "required": ["exercise_name", "previous_weight", "sets_completed", "reps_target", "routine_day", "logged_on"],
+          "properties": {
+            "exercise_name": { "type": "string" },
+            "previous_weight": { "type": "number" },
+            "sets_completed": { "type": "integer" },
+            "reps_target": { "type": "string" },
+            "routine_day": { "type": "integer" },
+            "logged_on": { "type": "string" }
+          },
+          "additionalProperties": false
+        }
       },
       "additionalProperties": false
     },

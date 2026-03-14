@@ -12,7 +12,11 @@
       "required": ["record_id", "completed"],
       "properties": {
         "record_id": { "type": "string" },
-        "completed": { "type": "boolean" }
+        "completed": { "type": "boolean" },
+        "exercise_name": { "type": "string" },
+        "current_weight": { "type": "number" },
+        "sets_completed": { "type": "integer" },
+        "reps_target": { "type": "string" }
       },
       "additionalProperties": false
     },

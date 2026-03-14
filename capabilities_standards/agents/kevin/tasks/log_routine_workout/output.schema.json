@@ -13,7 +13,11 @@
       "properties": {
         "routine_day": { "type": "integer" },
         "completed": { "type": "boolean" },
-        "record_id": { "type": "string" }
+        "record_id": { "type": "string" },
+        "exercise_name": { "type": "string" },
+        "current_weight": { "type": "number" },
+        "sets_completed": { "type": "integer" },
+        "reps_target": { "type": "string" }
       },
       "additionalProperties": false
     },
