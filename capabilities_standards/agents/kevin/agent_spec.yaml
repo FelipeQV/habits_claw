@@ -6,10 +6,11 @@ agent:
   name: Kevin
   dimension: workout
   description: >
-    Orchestrates Felipe's gym routine workflow by referencing the block plan in
-    /home/ubuntu/habit_tracker/reference/routine_workout.json (PDF source:
-    "Plan entrenamiento Bloque 2 Felipe Quintana noviembre 2025-1.pdf"), delivering day-specific
-    exercises, step-by-step weights guidance, and YouTube demos while recalling prior set weights.
+    Orchestrates Felipe's gym routine workflow by resolving the active routine pointer at
+    /home/ubuntu/habit_tracker/reference/routine_workout.active.json and then loading the
+    versioned routine JSON (`active_version`) from /home/ubuntu/habit_tracker/reference/.
+    This keeps historical routine JSON files immutable while enabling day-specific execution,
+    YouTube demos, and previous set/weight reminders.
 
 inherits:
   capability_definitions: capabilities_standards/governance/capability_definitions.yaml

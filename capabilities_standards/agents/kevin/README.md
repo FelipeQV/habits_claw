@@ -7,3 +7,8 @@ This folder hosts Kevin’s capability artifacts under the `capabilities_standar
 
 The plan follows `kevin_migration_plan_for_codex.md` and ensures `workout_done` plus `cardio_total_min` remain derived for Jim from the `kevin_workouts` table. Append-only corrections leverage `record_id`/`corrected` metadata so the newest entry always wins.  
 Run `tools/kevin_smoke_fixture.sql` before smoke tests to seed the `workouts` table with cardio/routine records ready for validation.
+
+Routine source selection is versioned:
+- Active pointer: `/home/ubuntu/habit_tracker/reference/routine_workout.active.json`
+- Versioned files: `/home/ubuntu/habit_tracker/reference/routine_workout_YYYY-MM.json`
+- Publisher: `tools/publish_routine_version.sh` (creates new versioned routine JSON files without overwriting historical ones)
