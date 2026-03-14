@@ -1,0 +1,4 @@
+name: update_yoga
+description: Corrects an existing yoga entry while preserving append-only history.
+purpose: keep yoga logs accurate and traceable through record_id chains.
+access_mode: write_correction

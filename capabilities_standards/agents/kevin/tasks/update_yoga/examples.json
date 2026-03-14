@@ -1,0 +1,23 @@
+[
+  {
+    "name": "success",
+    "response": {
+      "protocol_version": "1.0.0",
+      "task": "update_yoga",
+      "ok": true,
+      "data": {
+        "record_id": "yoga-2026-03-14-001",
+        "yoga_done": true,
+        "yoga_type": "hatha"
+      },
+      "error": null,
+      "meta": {
+        "source": "duckdb",
+        "db_path": "/home/ubuntu/health_system.duckdb",
+        "agent_id": "kevin",
+        "timestamp": "2026-03-14T13:00:00Z",
+        "trace_id": "trace-yoga-002"
+      }
+    }
+  }
+]

@@ -28,6 +28,9 @@ data_model:
     - name: cardio_type
       type: string
       set_by: user
+    - name: yoga_done
+      type: boolean
+      set_by: user
     - name: yoga_type
       type: string
       set_by: user

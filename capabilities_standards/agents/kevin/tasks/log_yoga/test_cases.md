@@ -1,0 +1,2 @@
+- Success case: yoga_done=true with yoga_type=vinyasa inserts a new non-corrected row.
+- Validation case: empty yoga_type returns VALIDATION_ERROR.

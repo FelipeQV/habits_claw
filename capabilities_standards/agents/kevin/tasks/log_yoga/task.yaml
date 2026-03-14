@@ -1,0 +1,4 @@
+name: log_yoga
+description: Logs yoga sessions with yoga completion and yoga type.
+purpose: capture non-cardio light activity without overloading cardio_type.
+access_mode: write_append
