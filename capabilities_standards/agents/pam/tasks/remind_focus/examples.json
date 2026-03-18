@@ -1,0 +1,39 @@
+[
+  {
+    "name": "success_response",
+    "response": {
+      "protocol_version": "1.0.0",
+      "task": "remind_focus",
+      "ok": true,
+      "data": {"message":"Top focus: close one high-priority todo, then clear one unread reading item.","active_todo_count":4,"unread_count":7,"todo_candidates":["todo_9001","todo_9002"],"reading_candidates":["read_1001","read_1002"],"confidence":{"level":"mid","basis":["sample_size","consistency_over_time"]}},
+      "error": null,
+      "meta": {
+        "source": "duckdb",
+        "db_path": "/home/ubuntu/health_system.duckdb",
+        "timestamp": "2026-03-14T10:00:00Z",
+        "trace_id": "trace-remind_focus-success",
+        "agent_id": "pam"
+      }
+    }
+  },
+  {
+    "name": "validation_error_response",
+    "response": {
+      "protocol_version": "1.0.0",
+      "task": "remind_focus",
+      "ok": false,
+      "data": null,
+      "error": {
+        "code": "VALIDATION_ERROR",
+        "message": "max_items must be <= 10"
+      },
+      "meta": {
+        "source": "duckdb",
+        "db_path": "/home/ubuntu/health_system.duckdb",
+        "timestamp": "2026-03-14T10:00:01Z",
+        "trace_id": "trace-remind_focus-error",
+        "agent_id": "pam"
+      }
+    }
+  }
+]

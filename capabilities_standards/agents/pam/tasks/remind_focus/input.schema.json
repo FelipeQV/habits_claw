@@ -1,0 +1,12 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "remind_focus.input",
+  "type": "object",
+  "properties": {
+    "max_items": { "type": "integer", "minimum": 1, "maximum": 10 },
+    "include_reading": { "type": "boolean" },
+    "include_todos": { "type": "boolean" },
+    "context_note": { "type": "string" }
+  },
+  "additionalProperties": false
+}

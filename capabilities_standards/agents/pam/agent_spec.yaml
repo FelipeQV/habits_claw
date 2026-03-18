@@ -1,0 +1,231 @@
+version: 1.0
+status: draft
+
+agent:
+  id: pam
+  name: Pam
+  dimension: organization
+  description: >
+    Owns reading and todo organization workflows. Keeps unread reading backlog and
+    pending todos visible, categorized, and actionable with concise reminders.
+
+inherits:
+  capability_definitions: capabilities_standards/governance/capability_definitions.yaml
+
+data_model:
+  table:
+    name: pam_reading_items
+  fields:
+    - name: reading_id
+      type: string
+      set_by: agent
+      values: []
+      notes: stable ID for reading item
+    - name: url
+      type: string
+      set_by: user
+      values: []
+      notes: original link captured by user
+    - name: description
+      type: string
+      set_by: user
+      values: []
+      notes: brief why-this-matters context
+    - name: status
+      type: string
+      set_by: agent
+      values: [unread, read]
+      notes: unread by default on create
+    - name: categories
+      type: array
+      set_by: user
+      values: []
+      notes: one or more open taxonomy labels
+    - name: source
+      type: string
+      set_by: user
+      values: []
+      notes: optional source/site label
+    - name: created_at
+      type: string
+      set_by: agent
+      values: []
+      notes: write timestamp
+    - name: updated_at
+      type: string
+      set_by: agent
+      values: []
+      notes: latest status/category change timestamp
+    - name: todo_id
+      type: string
+      set_by: agent
+      values: []
+      notes: stable ID for todo item
+    - name: title
+      type: string
+      set_by: user
+      values: []
+      notes: normalized actionable todo text
+    - name: priority_label
+      type: string
+      set_by: user
+      values: []
+      notes: open priority label, user-editable
+    - name: priority_rank
+      type: int
+      set_by: user
+      values: []
+      notes: optional numeric sort hint (lower is higher priority)
+    - name: due_date
+      type: date
+      set_by: user
+      values: []
+      notes: optional due date
+    - name: todo_status
+      type: string
+      set_by: user
+      values: [active, completed, deferred]
+      notes: lifecycle state
+
+targets:
+  enabled: false
+
+delta:
+  enabled: false
+
+capabilities:
+
+  log:
+    inherits: capability_definitions.log
+    extensible: true
+    subtypes:
+      - name: reading_item
+        active: true
+        table: pam_reading_items
+        binding:
+          id: add_reading_item
+          inference: estimate_allowed_with_flag
+          correction_strategy: append_only
+          query_template: /home/ubuntu/.openclaw/workspace/capabilities_standards/agents/pam/tasks/add_reading_item/query.template.sql
+        overrides: []
+        extends:
+          - set status=unread at creation
+          - reject completion when categories array is empty
+      - name: todo_item
+        active: true
+        table: pam_todos
+        binding:
+          id: add_todo
+          inference: estimate_allowed_with_flag
+          correction_strategy: append_only
+          query_template: /home/ubuntu/.openclaw/workspace/capabilities_standards/agents/pam/tasks/add_todo/query.template.sql
+        overrides: []
+        extends:
+          - set todo_status=active at creation when missing
+
+  update:
+    inherits: capability_definitions.update
+    extensible: true
+    subtypes:
+      - name: reading_category
+        active: true
+        table: pam_reading_items
+        binding:
+          id: categorize_reading_item
+          inference: not_allowed
+          correction_strategy: upsert_by_key
+          key: [reading_id]
+          query_template: /home/ubuntu/.openclaw/workspace/capabilities_standards/agents/pam/tasks/categorize_reading_item/query.template.sql
+        overrides: []
+        extends:
+          - categories must contain at least one non-empty string
+      - name: reading_status
+        active: true
+        table: pam_reading_items
+        binding:
+          id: mark_reading_as_read
+          inference: not_allowed
+          correction_strategy: upsert_by_key
+          key: [reading_id]
+          query_template: /home/ubuntu/.openclaw/workspace/capabilities_standards/agents/pam/tasks/mark_reading_as_read/query.template.sql
+        overrides: []
+        extends: []
+      - name: todo_status
+        active: true
+        table: pam_todos
+        binding:
+          id: update_todo_status
+          inference: not_allowed
+          correction_strategy: upsert_by_key
+          key: [todo_id]
+          query_template: /home/ubuntu/.openclaw/workspace/capabilities_standards/agents/pam/tasks/update_todo_status/query.template.sql
+        overrides: []
+        extends: []
+      - name: todo_priority
+        active: true
+        table: pam_todos
+        binding:
+          id: prioritize_todos
+          inference: not_allowed
+          correction_strategy: upsert_by_key
+          key: [todo_id]
+          query_template: /home/ubuntu/.openclaw/workspace/capabilities_standards/agents/pam/tasks/prioritize_todos/query.template.sql
+        overrides: []
+        extends: []
+
+  report:
+    inherits: capability_definitions.report
+    extensible: true
+    subtypes:
+      - name: unread_reading_queue
+        active: true
+        table: pam_reading_items
+        binding:
+          id: list_unread_reading
+          query_template: /home/ubuntu/.openclaw/workspace/capabilities_standards/agents/pam/tasks/list_unread_reading/query.template.sql
+        overrides: []
+        extends: []
+      - name: reading_search
+        active: true
+        table: pam_reading_items
+        binding:
+          id: search_reading
+          query_template: /home/ubuntu/.openclaw/workspace/capabilities_standards/agents/pam/tasks/search_reading/query.template.sql
+        overrides: []
+        extends: []
+      - name: focus_queue
+        active: true
+        table: pam_todos
+        binding:
+          id: list_focus_queue
+          query_template: /home/ubuntu/.openclaw/workspace/capabilities_standards/agents/pam/tasks/list_focus_queue/query.template.sql
+        overrides: []
+        extends: []
+
+  analyze:
+    inherits: capability_definitions.analyze
+    extensible: true
+    subtypes:
+      - name: focus_reminder
+        active: true
+        table: pam_todos
+        binding:
+          id: remind_focus
+          query_template: /home/ubuntu/.openclaw/workspace/capabilities_standards/agents/pam/tasks/remind_focus/query.template.sql
+        overrides: []
+        extends:
+          - keep reminder output concise and context-aware
+
+  prescribe:
+    owned_by: orchestration_agent
+    this_agent_may: []
+    this_agent_cannot:
+      - generate strategic cross-domain plans
+
+boundaries:
+  - trigger: request asks for cross-domain strategy or long-horizon plan
+    response: provide in-scope organization context, then redirect strategic planning to orchestration_agent
+
+redirects:
+  - condition: request requires nutrition/workout/day-contract recommendations
+    to: orchestration_agent

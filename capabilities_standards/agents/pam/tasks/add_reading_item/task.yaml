@@ -1,0 +1,4 @@
+name: add_reading_item
+description: Capture a reading item with mandatory category and unread initial state.
+purpose: Capture a reading item with mandatory category and unread initial state.
+access_mode: write_append

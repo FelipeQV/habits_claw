@@ -1,0 +1,39 @@
+[
+  {
+    "name": "success_response",
+    "response": {
+      "protocol_version": "1.0.0",
+      "task": "prioritize_todos",
+      "ok": true,
+      "data": {"todo_id":"todo_9001","priority_label":"high","priority_rank":1,"updated_at":"2026-03-14T10:21:00Z"},
+      "error": null,
+      "meta": {
+        "source": "duckdb",
+        "db_path": "/home/ubuntu/health_system.duckdb",
+        "timestamp": "2026-03-14T10:00:00Z",
+        "trace_id": "trace-prioritize_todos-success",
+        "agent_id": "pam"
+      }
+    }
+  },
+  {
+    "name": "validation_error_response",
+    "response": {
+      "protocol_version": "1.0.0",
+      "task": "prioritize_todos",
+      "ok": false,
+      "data": null,
+      "error": {
+        "code": "VALIDATION_ERROR",
+        "message": "todo_id is required"
+      },
+      "meta": {
+        "source": "duckdb",
+        "db_path": "/home/ubuntu/health_system.duckdb",
+        "timestamp": "2026-03-14T10:00:01Z",
+        "trace_id": "trace-prioritize_todos-error",
+        "agent_id": "pam"
+      }
+    }
+  }
+]

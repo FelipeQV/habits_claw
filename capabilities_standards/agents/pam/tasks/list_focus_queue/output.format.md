@@ -1,0 +1,4 @@
+- Return canonical JSON envelope first.
+- User-facing text must start with the emoji-only capability marker for the invoked capability.
+- Never include technical capability/task labels in user-facing text.
+- Keep language concise and action-oriented.

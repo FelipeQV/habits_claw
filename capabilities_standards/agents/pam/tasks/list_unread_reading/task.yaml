@@ -1,0 +1,4 @@
+name: list_unread_reading
+description: List unread reading items with optional category filter and deterministic sort.
+purpose: List unread reading items with optional category filter and deterministic sort.
+access_mode: read_only
