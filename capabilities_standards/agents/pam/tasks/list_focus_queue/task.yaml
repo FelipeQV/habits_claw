@@ -1,4 +1,6 @@
 name: list_focus_queue
+capability: report
+emoji: 📖
 description: Return prioritized actionable todos and unread backlog signals.
 purpose: Return prioritized actionable todos and unread backlog signals.
 access_mode: read_only

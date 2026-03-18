@@ -1,4 +1,6 @@
 name: mark_reading_as_read
+capability: update
+emoji: 📝
 description: Set reading status to read or unread and persist status transitions.
 purpose: Set reading status to read or unread and persist status transitions.
 access_mode: write_correction

@@ -1,4 +1,6 @@
 name: prioritize_todos
+capability: update
+emoji: 📝
 description: Set or change todo priority label and rank for sorting focus.
 purpose: Set or change todo priority label and rank for sorting focus.
 access_mode: write_correction

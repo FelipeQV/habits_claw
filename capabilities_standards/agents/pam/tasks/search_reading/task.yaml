@@ -1,4 +1,6 @@
 name: search_reading
+capability: report
+emoji: 📖
 description: Search reading items by keyword, category, status, source, and date range.
 purpose: Search reading items by keyword, category, status, source, and date range.
 access_mode: read_only
