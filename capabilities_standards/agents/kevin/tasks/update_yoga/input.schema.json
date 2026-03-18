@@ -1,0 +1,16 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "update_yoga.input",
+  "type": "object",
+  "required": ["record_id", "yoga_type"],
+  "properties": {
+    "record_id": {
+      "type": "string"
+    },
+    "yoga_type": {
+      "type": "string",
+      "minLength": 1
+    }
+  },
+  "additionalProperties": false
+}

@@ -1,2 +1,3 @@
 - Daily summary: run report for today's date and confirm totals plus derived fields.  
 - Range summary: request past 3 days; verify cardio_total_min sums only non-corrected rows.  
+- Previous weight lookup: provide `exercise_name` and verify `previous_exercise` returns latest non-corrected weight metadata.  

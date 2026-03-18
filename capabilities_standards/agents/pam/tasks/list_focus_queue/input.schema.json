@@ -1,0 +1,15 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "list_focus_queue.input",
+  "type": "object",
+  "properties": {
+    "include_deferred": { "type": "boolean" },
+    "limit": { "type": "integer", "minimum": 1, "maximum": 100 },
+    "sort_by": {
+      "type": "string",
+      "enum": ["priority_rank", "due_date", "updated_at"]
+    },
+    "sort_order": { "type": "string", "enum": ["asc", "desc"] }
+  },
+  "additionalProperties": false
+}

@@ -1,1 +1,2 @@
 - Success case: mark day completed, update to false, then true, verifying corrected flags.  
+- Weight correction case: update the same `record_id` with a new `exercise_name/current_weight` payload and verify previous history row is marked corrected while new correction row is active.  

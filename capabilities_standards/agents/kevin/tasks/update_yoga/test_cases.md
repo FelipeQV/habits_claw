@@ -1,0 +1,2 @@
+- Success case: correct yoga_type on existing yoga record and mark previous row corrected.
+- Lineage check: new row is inserted with `record_id` correction suffix.

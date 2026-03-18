@@ -1,0 +1,39 @@
+[
+  {
+    "name": "success_response",
+    "response": {
+      "protocol_version": "1.0.0",
+      "task": "add_todo",
+      "ok": true,
+      "data": {"todo_id":"todo_9001","title":"Review Pam contracts","status":"active","priority_label":"high","priority_rank":1,"due_date":"2026-03-15","created_at":"2026-03-14T10:10:00Z","updated_at":"2026-03-14T10:10:00Z"},
+      "error": null,
+      "meta": {
+        "source": "duckdb",
+        "db_path": "/home/ubuntu/health_system.duckdb",
+        "timestamp": "2026-03-14T10:00:00Z",
+        "trace_id": "trace-add_todo-success",
+        "agent_id": "pam"
+      }
+    }
+  },
+  {
+    "name": "validation_error_response",
+    "response": {
+      "protocol_version": "1.0.0",
+      "task": "add_todo",
+      "ok": false,
+      "data": null,
+      "error": {
+        "code": "VALIDATION_ERROR",
+        "message": "title is required"
+      },
+      "meta": {
+        "source": "duckdb",
+        "db_path": "/home/ubuntu/health_system.duckdb",
+        "timestamp": "2026-03-14T10:00:01Z",
+        "trace_id": "trace-add_todo-error",
+        "agent_id": "pam"
+      }
+    }
+  }
+]

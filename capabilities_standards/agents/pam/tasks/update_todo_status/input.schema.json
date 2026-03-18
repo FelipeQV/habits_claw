@@ -1,0 +1,12 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "update_todo_status.input",
+  "type": "object",
+  "required": ["todo_id", "status"],
+  "properties": {
+    "todo_id": { "type": "string", "minLength": 1 },
+    "status": { "type": "string", "enum": ["active", "completed", "deferred"] },
+    "reason": { "type": "string" }
+  },
+  "additionalProperties": false
+}

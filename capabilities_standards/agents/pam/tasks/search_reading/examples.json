@@ -1,0 +1,39 @@
+[
+  {
+    "name": "success_response",
+    "response": {
+      "protocol_version": "1.0.0",
+      "task": "search_reading",
+      "ok": true,
+      "data": {"count":1,"items":[{"reading_id":"read_1001","url":"https://example.com/pam-flow","description":"Migration checklist notes","status":"unread","categories":["agent-design"],"source":"example.com","created_at":"2026-03-14T10:00:00Z","updated_at":"2026-03-14T10:00:00Z"}],"data_quality":{"level":"high","reason":"search filtered over complete reading metadata"}},
+      "error": null,
+      "meta": {
+        "source": "duckdb",
+        "db_path": "/home/ubuntu/health_system.duckdb",
+        "timestamp": "2026-03-14T10:00:00Z",
+        "trace_id": "trace-search_reading-success",
+        "agent_id": "pam"
+      }
+    }
+  },
+  {
+    "name": "validation_error_response",
+    "response": {
+      "protocol_version": "1.0.0",
+      "task": "search_reading",
+      "ok": false,
+      "data": null,
+      "error": {
+        "code": "VALIDATION_ERROR",
+        "message": "from must be YYYY-MM-DD"
+      },
+      "meta": {
+        "source": "duckdb",
+        "db_path": "/home/ubuntu/health_system.duckdb",
+        "timestamp": "2026-03-14T10:00:01Z",
+        "trace_id": "trace-search_reading-error",
+        "agent_id": "pam"
+      }
+    }
+  }
+]

@@ -12,7 +12,15 @@
           "routine_days": 1
         },
         "workout_done": true,
-        "cardio_total_min": 30
+        "cardio_total_min": 30,
+        "previous_exercise": {
+          "exercise_name": "Press inclinado con mancuernas",
+          "previous_weight": 32.5,
+          "sets_completed": 3,
+          "reps_target": "8-10",
+          "routine_day": 2,
+          "logged_on": "2026-03-10"
+        }
       },
       "error": null,
       "meta": {

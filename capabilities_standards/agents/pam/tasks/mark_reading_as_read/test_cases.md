@@ -1,0 +1,3 @@
+- Success case: valid input returns ok=true with task-specific required data fields.
+- Validation case: missing required input returns VALIDATION_ERROR.
+- Contract case: response envelope includes protocol_version/task/meta fields.

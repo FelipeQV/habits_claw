@@ -1,0 +1,4 @@
+name: categorize_reading_item
+description: Assign one or more categories to an existing reading item.
+purpose: Assign one or more categories to an existing reading item.
+access_mode: write_correction

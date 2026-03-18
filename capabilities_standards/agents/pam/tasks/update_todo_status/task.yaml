@@ -1,0 +1,4 @@
+name: update_todo_status
+description: Change todo lifecycle state among active/completed/deferred.
+purpose: Change todo lifecycle state among active/completed/deferred.
+access_mode: write_correction

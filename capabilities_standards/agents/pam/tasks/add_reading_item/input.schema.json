@@ -1,0 +1,18 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "add_reading_item.input",
+  "type": "object",
+  "required": ["url", "description", "categories"],
+  "properties": {
+    "url": { "type": "string", "minLength": 1 },
+    "description": { "type": "string", "minLength": 1 },
+    "categories": {
+      "type": "array",
+      "minItems": 1,
+      "items": { "type": "string", "minLength": 1 }
+    },
+    "source": { "type": "string", "minLength": 1 },
+    "captured_at": { "type": "string", "format": "date-time" }
+  },
+  "additionalProperties": false
+}

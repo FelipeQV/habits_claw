@@ -7,7 +7,11 @@
       "ok": true,
       "data": {
         "record_id": "routine-2026-03-13-003",
-        "completed": true
+        "completed": true,
+        "exercise_name": "Press inclinado con mancuernas",
+        "current_weight": 35,
+        "sets_completed": 3,
+        "reps_target": "8-10"
       },
       "error": null,
       "meta": {

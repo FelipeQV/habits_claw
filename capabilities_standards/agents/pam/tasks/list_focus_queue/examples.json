@@ -1,0 +1,39 @@
+[
+  {
+    "name": "success_response",
+    "response": {
+      "protocol_version": "1.0.0",
+      "task": "list_focus_queue",
+      "ok": true,
+      "data": {"count":1,"unread_count":3,"items":[{"todo_id":"todo_9001","title":"Review Pam contracts","status":"active","priority_label":"high","priority_rank":1,"due_date":"2026-03-15","updated_at":"2026-03-14T10:21:00Z","due_soon":1}],"data_quality":{"level":"high","reason":"active todos and unread count computed from current rows"}},
+      "error": null,
+      "meta": {
+        "source": "duckdb",
+        "db_path": "/home/ubuntu/health_system.duckdb",
+        "timestamp": "2026-03-14T10:00:00Z",
+        "trace_id": "trace-list_focus_queue-success",
+        "agent_id": "pam"
+      }
+    }
+  },
+  {
+    "name": "validation_error_response",
+    "response": {
+      "protocol_version": "1.0.0",
+      "task": "list_focus_queue",
+      "ok": false,
+      "data": null,
+      "error": {
+        "code": "VALIDATION_ERROR",
+        "message": "sort_by unsupported value"
+      },
+      "meta": {
+        "source": "duckdb",
+        "db_path": "/home/ubuntu/health_system.duckdb",
+        "timestamp": "2026-03-14T10:00:01Z",
+        "trace_id": "trace-list_focus_queue-error",
+        "agent_id": "pam"
+      }
+    }
+  }
+]
