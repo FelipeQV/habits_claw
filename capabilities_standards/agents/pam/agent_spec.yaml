@@ -172,6 +172,17 @@ capabilities:
           query_template: /home/ubuntu/.openclaw/workspace/capabilities_standards/agents/pam/tasks/prioritize_todos/query.template.sql
         overrides: []
         extends: []
+      - name: reading_priority
+        active: true
+        table: pam_reading_items
+        binding:
+          id: prioritize_reading_items
+          inference: not_allowed
+          correction_strategy: upsert_by_key
+          key: [reading_id]
+          query_template: /home/ubuntu/.openclaw/workspace/capabilities_standards/agents/pam/tasks/prioritize_reading_items/query.template.sql
+        overrides: []
+        extends: []
 
   report:
     inherits: capability_definitions.report

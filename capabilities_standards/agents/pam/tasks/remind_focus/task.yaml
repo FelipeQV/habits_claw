@@ -1,4 +1,6 @@
 name: remind_focus
+capability: analyze
+emoji: 📈
 description: Generate concise focus nudge from active todo and unread reading context.
 purpose: Generate concise focus nudge from active todo and unread reading context.
 access_mode: read_only

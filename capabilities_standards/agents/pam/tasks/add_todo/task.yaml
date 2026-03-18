@@ -1,4 +1,6 @@
 name: add_todo
+capability: log
+emoji: ✏️
 description: Create todo with active default status and optional priority/due date.
 purpose: Create todo with active default status and optional priority/due date.
 access_mode: write_append

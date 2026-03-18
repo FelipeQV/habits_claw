@@ -1,4 +1,6 @@
 name: categorize_reading_item
+capability: update
+emoji: 📝
 description: Assign one or more categories to an existing reading item.
 purpose: Assign one or more categories to an existing reading item.
 access_mode: write_correction

@@ -1,0 +1,6 @@
+name: prioritize_reading_items
+capability: update
+emoji: 📝
+description: Set or change reading item priority label and rank for sorting the reading backlog.
+purpose: Set or change reading item priority label and rank for sorting the reading backlog.
+access_mode: write_correction

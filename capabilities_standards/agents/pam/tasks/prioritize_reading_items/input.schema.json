@@ -1,0 +1,16 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "prioritize_reading_items.input",
+  "type": "object",
+  "required": ["reading_id"],
+  "properties": {
+    "reading_id": { "type": "string", "minLength": 1 },
+    "priority_label": { "type": "string", "minLength": 1 },
+    "priority_rank": { "type": "integer", "minimum": 1, "maximum": 999 }
+  },
+  "anyOf": [
+    { "required": ["priority_label"] },
+    { "required": ["priority_rank"] }
+  ],
+  "additionalProperties": false
+}
