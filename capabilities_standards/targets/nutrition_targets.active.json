@@ -1,5 +1,5 @@
 {
-  "active_version": "nutrition_targets_2025-11.json",
-  "effective_from": "2025-11-01",
+  "active_version": "nutrition_targets_2026-03.json",
+  "effective_from": "2026-03-01",
   "notes": "Update active_version when nutritionist publishes a new target file. Do not edit historical versioned files."
 }
